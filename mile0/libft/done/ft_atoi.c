@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/07 20:11:07 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/04/08 21:03:25 by ppaula-s         ###   ########.fr       */
+/*   Created: 2025/04/13 18:09:20 by ppaula-s          #+#    #+#             */
+/*   Updated: 2025/04/13 18:11:06 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,31 @@
 
 int	ft_atoi(const char *nptr)
 {
-	int	total;
-	int	i;
-	int	sign;
+	int				i;
+	int				sign;
+	unsigned int	n;
 
-	sign = 1;
-	total = 0;
 	i = 0;
-	while (nptr[i] == ' ' || nptr[i] == '\t' || nptr[i] == '\f'
-		|| nptr[i] == '\r' || nptr[i] == '\n' || nptr[i] == '\v')
+	sign = 1;
+	n = 0;
+	while (nptr[i] == 32 || (nptr[i] >= 9 && nptr[i] <= 13))
 		i++;
-	if (nptr[i] == 43 || nptr[i] == 45 || nptr[i] == 32)
+	if (nptr[i] == '+' || nptr[i] == '-')
 	{
-		if (nptr[i] == 45)
+		if (nptr[i] == '-')
 			sign = -1;
 		i++;
 	}
 	while (ft_isdigit(nptr[i]))
 	{
-		total = total * 10 + (nptr[i] - 48);
-		i++;
+		if (n > INT_MAX / 10
+			|| (n == INT_MAX / 10 && (nptr[i] - '0') > INT_MAX % 10))
+		{
+			if (sign == 1)
+				return (-1);
+			return (0);
+		}
+		n = n * 10 + (nptr[i++] - '0');
 	}
-	return (total * sign);
+	return ((int)(n * sign));
 }

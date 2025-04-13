@@ -6,7 +6,7 @@
 /*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:22:44 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/04/11 23:50:22 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/04/12 00:26:45 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 
 size_t	ft_strlen(const char *s);
+
+size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 
 void	ft_putchar_fd(char c, int fd);
 
