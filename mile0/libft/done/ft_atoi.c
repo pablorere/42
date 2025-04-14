@@ -6,17 +6,14 @@
 /*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 18:09:20 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/04/14 15:09:26 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/04/14 17:49:19 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <limits.h>
 #include <stdlib.h> 
-<<<<<<< HEAD
 #include "libft.h"
-=======
->>>>>>> refs/remotes/origin/main
 
 int	ft_isspace(int c)
 {
@@ -36,13 +33,6 @@ int	ft_atoi(const char *nptr)
 	sign = 1 - 2 * (nptr[i] == '-');
 	i += nptr[i] == '+' || nptr[i] == '-';
 	while (ft_isdigit(nptr[i]))
-<<<<<<< HEAD
-=======
-	{
-		if (n > INT_MAX / 10
-			|| (n == INT_MAX / 10 && (nptr[i] - '0') > INT_MAX % 10))
-			return (-(sign == 1));
->>>>>>> refs/remotes/origin/main
 		n = n * 10 + (nptr[i++] - '0');
 	return (n * sign);
 }
