@@ -5,26 +5,28 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/09 06:59:44 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/04/12 00:30:04 by ppaula-s         ###   ########.fr       */
+/*   Created: 2025/04/14 14:51:41 by ppaula-s          #+#    #+#             */
+/*   Updated: 2025/04/14 14:52:11 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcat(char *dst, const char *src, size_t size)
+size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
 	size_t	lendst;
-	size_t	lensrc;
-	size_t	count;
+	size_t	i;
 
+	if (dstsize <= ft_strlen(dst))
+		return (dstsize + ft_strlen(src));
 	lendst = ft_strlen(dst);
-	lensrc = ft_strlen(src);
-	if (size <= lendst)
-		return (lensrc + size);
-	count = lensrc;
-	while (src[count] && count < (size - 1))
-		*(dst + count++) = *src++;
-	*(dst + count) = '\0';
-	return (lendst + lensrc);
+	i = 0;
+	while (src[i] != '\0' && lendst + 1 < dstsize)
+	{
+		dst[lendst] = src[i];
+		lendst++;
+		i++;
+	}
+	dst[lendst] = '\0';
+	return (ft_strlen(dst) + ft_strlen(&src[i]));
 }
