@@ -14,11 +14,6 @@
 #include <limits.h>
 #include <stdlib.h> 
 
-int ft_isdigit(int num)
-{
-	return (num >= '0' && num <= '9');
-}
-
 int	ft_atoi(const char *nptr)
 {
 	int				i;
