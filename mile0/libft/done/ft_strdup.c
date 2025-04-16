@@ -1,34 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/09 06:39:24 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/04/15 10:59:16 by ppaula-s         ###   ########.fr       */
+/*   Created: 2025/04/15 10:47:40 by ppaula-s          #+#    #+#             */
+/*   Updated: 2025/04/15 12:01:14 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t outsize)
+char	*ft_strdup(const char *s)
 {
-	size_t	srcsize;
-	size_t	i;
+	size_t	size;
+	char	*position;
 
-	if (!dst || !src)
-		return (0);
-	srcsize = ft_strlen(src);
-	i = 0;
-	if (outsize != 0)
-	{
-		while (src[i] != '\0' && i < (outsize - 1))
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		dst[i] = '\0';
-	}
-	return (srcsize);
+	size = ft_strlen(s) + 1;
+	position = malloc(size);
+	if (!position)
+		return (NULL);
+	ft_strlcpy(position, s, size);
+	return (position);
 }

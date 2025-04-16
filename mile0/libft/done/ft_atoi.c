@@ -6,13 +6,11 @@
 /*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 18:09:20 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/04/14 17:52:44 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:30:59 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <limits.h>
-#include <stdlib.h> 
+#include <stdlib.h>
 #include "libft.h"
 
 int	ft_isspace(int c)
