@@ -6,7 +6,7 @@
 /*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:22:44 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/04/15 17:45:45 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:28:11 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,12 @@ void	ft_putnbr_fd(int n, int fd);
 
 void	ft_putstr_fd(char *s, int fd);
 
+char	*ft_strtrim(char const *s1, char const *set);
+
 void	ft_putendl_fd(char *s, int fd);
 
 char	*ft_itoa(int n);
+
+char	*ft_strnstr(const char *big, const char *little, size_t len);
 
 #endif

@@ -1,18 +1,9 @@
-ft_itoa
-ft_split
-ft_strdup
-ft_striteri
-ft_strjoin
-ft_strmapi
-ft_strnstr
-ft_strtrim
-ft_substr
-	ft_lstadd_back
-	ft_lstadd_front
-	ft_lstclear
-	ft_lstdelone
-	ft_lstiter
-	ft_lstlast
-	ft_lstmap
-	ft_lstnew
-	ft_lstsize
+touch ft_lstnew.c
+touch ft_lstadd_back.c
+touch ft_lstadd_front.c 
+touch ft_lstclear.c
+touch ft_lstdelone.c
+touch ft_lstiter.c
+touch ft_lstlast.c
+touch ft_lstmap.c
+touch ft_lstsize.c
