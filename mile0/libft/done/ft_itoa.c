@@ -6,46 +6,42 @@
 /*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 12:03:01 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/04/16 12:16:36 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/04/16 13:18:24 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+size_t	ft_intlen(int n)
+{
+	unsigned int	abs;
+	size_t			i;
+
+	abs = n - 2 * n * (n < 0);
+	i = (n <= 0);
+	while (abs > 0 && ++i)
+		abs /= 10;
+	return (i);
+}
+
 char	*ft_itoa(int n)
 {
-	unsigned int	cpy;
-	int				i;
+	unsigned int	abs;
+	size_t			i;
 	char			*str;
 
-	i = (n < 0);
-	cpy = n;
-	while (cpy != 0)
-	{
-		i ++;
-		cpy /= 10;
-	}
+	i = ft_intlen(n);
 	str = malloc((i + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
 	str[0] = '-';
 	str[i] = '\0';
-	cpy = n;
-	if (n < 0)
-		cpy = -n;
-	while (cpy)
+	abs = n - 2 * n * (n < 0);
+	while (1)
 	{
-		str[--i] = '0' + (cpy % 10);
-		cpy /= 10;
+		str[--i] = '0' + (abs % 10);
+		abs /= 10;
+		if (abs == 0)
+			return (str);
 	}
-	return (str);
 }
-/*
-int main(int argc, char const *argv[])
-{
-	char *str = ft_itoa(0);
-	printf("Numero: %s\n", str);
-	if (str)
-		free(str);
-	return 0;
-}*/
