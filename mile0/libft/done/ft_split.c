@@ -12,15 +12,6 @@
 
 #include "libft.h"
 
-/*
-size_t	wcount(char const *s, char c)
-{
-	if (*s)
-		return ((*s != c && s[1] == c * !!s[1]) + wcount(&s[1], c));
-	return (0);
-}
-*/
-
 size_t	ft_wcount(char const *s, char c)
 {
 	size_t	i;
@@ -61,6 +52,7 @@ char	*ft_worddup(char const *start, size_t len)
 	word[i] = '\0';
 	return (word);
 }
+
 static char	*word_dup(const char *str, int start, int finish)
 {
 	char	*word;
@@ -74,14 +66,15 @@ static char	*word_dup(const char *str, int start, int finish)
 	return (word);
 }
 
-char		**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
 	size_t	i;
 	size_t	j;
 	int		index;
 	char	**split;
 
-	if (!s || !(split = malloc((ft_wcount(s, c) + 1) * sizeof(char *))))
+	split = malloc((ft_wcount(s, c) + 1) * sizeof(char *));
+	if (!s || !split)
 		return (0);
 	i = 0;
 	j = 0;
@@ -100,10 +93,18 @@ char		**ft_split(char const *s, char c)
 	split[j] = 0;
 	return (split);
 }
-
+/*
 int	main(int ac, char const *av[])
 {
 	(void)ac;
 	printf("%zu\n", ft_wcount(av[1], av[2][0]));
 	return (0);
 }
+
+size_t	wcount(char const *s, char c)
+{
+	if (*s)
+		return ((*s != c && s[1] == c * !!s[1]) + wcount(&s[1], c));
+	return (0);
+}
+*/
