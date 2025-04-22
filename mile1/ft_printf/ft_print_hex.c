@@ -1,30 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_print_hex.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/22 16:43:42 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/04/22 17:43:48 by ppaula-s         ###   ########.fr       */
+/*   Created: 2025/04/22 16:51:12 by ppaula-s          #+#    #+#             */
+/*   Updated: 2025/04/22 19:15:18 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include <unistd.h>
 
-# include <stdarg.h>
-# include <unistd.h>
+#define hex "0123456789abcdef"
+#define HEX "0123456789ABCDEF"
 
-int	print_hex(unsigned long str, int i);
-int	print_char(char c);
-int	print_str(char *str);
-int	print_nbr(int nbr);
-int	print_nbr_2(unsigned int nbr);
-int	printf_p(char *a);
-int	ft_printf(const char *input, ...);
+static void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
 
-#endif
+void print_hex(unsigned int num, char *dic)
+{
+	if (num >= 16)
+		print_hex(num / 16, dic);
+	ft_putchar(dic[num % 16]);
+}
 
-return (printf("%x", str));
+int main(void)
+{
+	unsigned int num;
+
+	num = 16;
+	print_hex(num, HEX);
+	ft_putchar('\n');
+	return (0);
 }
