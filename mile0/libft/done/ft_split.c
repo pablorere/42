@@ -5,106 +5,109 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/16 16:01:23 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/04/16 16:01:24 by ppaula-s         ###   ########.fr       */
+/*   Created: 2025/04/19 19:01:12 by ppaula-s          #+#    #+#             */
+/*   Updated: 2025/04/19 19:10:52 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_wcount(char const *s, char c)
+size_t	ft_countstr(char const *s, char c)
 {
 	size_t	i;
-	size_t	word;
-	int		in_word;
+	size_t	j;
 
 	i = 0;
-	word = 0;
-	in_word = 0;
+	j = 0;
 	while (s[i])
 	{
-		if (s[i] != c && !in_word)
+		while (s[i] == c)
+			i++;
+		if (s[i])
 		{
-			in_word = 1;
-			word++;
+			while (s[i] && s[i] != c)
+				i++;
+			j++;
 		}
-		else if (s[i] == c)
-			in_word = 0;
-		i++;
 	}
-	return (word);
+	return (j);
 }
 
-char	*ft_worddup(char const *start, size_t len)
+static void	free_subs(char **subs, size_t k)
 {
-	char	*word;
+	while (k > 0)
+		free(subs[--k]);
+	free(subs);
+}
+
+static int	ft_fill_subs(char const *s, char c, size_t j, char **subs)
+{
 	size_t	i;
+	size_t	k;
 
-	word = malloc(len + 1);
-	if (!word)
-		return (NULL);
 	i = 0;
-	while (i < len)
+	k = 0;
+	while (s[i])
 	{
-		word[i] = start[i];
-		i++;
+		while (s[i] == c)
+			i++;
+		j = i;
+		while (s[i] && s[i] != c)
+			i++;
+		if (i > j)
+		{
+			subs[k] = ft_substr(s, j, i - j);
+			if (!subs[k++])
+			{
+				free_subs(subs, k - 1);
+				return (0);
+			}
+		}
 	}
-	word[i] = '\0';
-	return (word);
-}
-
-static char	*word_dup(const char *str, int start, int finish)
-{
-	char	*word;
-	int		i;
-
-	i = 0;
-	word = malloc((finish - start + 1) * sizeof(char));
-	while (start < finish)
-		word[i++] = str[start++];
-	word[i] = '\0';
-	return (word);
+	subs[k] = NULL;
+	return (1);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	size_t	i;
+	char	**subs;
 	size_t	j;
-	int		index;
-	char	**split;
 
-	split = malloc((ft_wcount(s, c) + 1) * sizeof(char *));
-	if (!s || !split)
-		return (0);
-	i = 0;
-	j = 0;
-	index = -1;
-	while (i <= ft_strlen(s))
-	{
-		if (s[i] != c && index < 0)
-			index = i;
-		else if ((s[i] == c || i == ft_strlen(s)) && index >= 0)
-		{
-			split[j++] = word_dup(s, index, i);
-			index = -1;
-		}
-		i++;
-	}
-	split[j] = 0;
-	return (split);
+	if (!s)
+		return (NULL);
+	j = ft_countstr(s, c);
+	subs = malloc((j + 1) * sizeof(char *));
+	if (!subs)
+		return (NULL);
+	if (!ft_fill_subs(s, c, j, subs))
+		return (NULL);
+	return (subs);
 }
 /*
-int	main(int ac, char const *av[])
+int	main(void)
 {
-	(void)ac;
-	printf("%zu\n", ft_wcount(av[1], av[2][0]));
-	return (0);
-}
+	char	**result;
+	int		i = 0;
 
-size_t	wcount(char const *s, char c)
-{
-	if (*s)
-		return ((*s != c && s[1] == c * !!s[1]) + wcount(&s[1], c));
+	char *input = "      split       this for   me  !       ";
+	char separator = ' ';
+
+	result = ft_split(input, separator);
+	if (!result)
+	{
+		printf("ft_split returned NULL\n");
+		return (1);
+	}
+
+	while (result[i])
+	{
+		printf("[%s]\n", result[i]);
+		i++;
+	}
+
+	if (result[i] == NULL)
+		printf("[NULL]\n");
+
 	return (0);
 }
 */

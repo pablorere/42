@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/ppaula-s/Documents/42/mile0/libft/done",
-      "program": "/home/ppaula-s/Documents/42/mile0/libft/done/build/Debug/outDebug",
+      "cwd": "/home/ppaula-s/Documents/42/mile1/ft_printf",
+      "program": "/home/ppaula-s/Documents/42/mile1/ft_printf/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

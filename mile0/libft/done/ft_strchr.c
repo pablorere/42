@@ -6,7 +6,7 @@
 /*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:52:37 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/04/14 19:10:54 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/04/19 19:23:58 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ char	*ft_strchr(const char *s, int c)
 {
 	size_t	i;
 
-	if (!s)
-		return (NULL);
 	i = 0;
 	while (s[i])
 	{
@@ -29,3 +27,6 @@ char	*ft_strchr(const char *s, int c)
 		return ((char *)&s[i]);
 	return (NULL);
 }
+
+/*	if (!s)
+		return (NULL); */
