@@ -13,15 +13,16 @@
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include <stdarg.h>
 # include <unistd.h>
+# include <stdlib.h>
+# include <stdarg.h>
 
-int	ft_print_base(unsigned long str, int i);
-int	ft_print_char(char c);
-int	ft_print_str(char *str);
-int	ft_print_nbr(int nbr);
-int	ft_print_nbr_2(unsigned int nbr);
-int	ft_printf_p(char *a);
+# define UPBASE "0123456789ABCDEF"
+# define LOWBASE "0123456789abcdef"
+
+int	ft_putchar(char c);
+int	ft_putstr(char *str);
+int	ft_putnb(long n, int base, int boo, int len);
 int	ft_printf(const char *input, ...);
 
 #endif
