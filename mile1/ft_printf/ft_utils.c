@@ -20,18 +20,15 @@ int	ft_putchar(char c)
 
 int	ft_putstr(char *str)
 {
-	write(1, str, ft_strlen(str));
+	return (write(1, str, ft_strlen(str)));
 }
 
 int	ft_putnb(long n, int base, int boo, int len)
 {
-	int	flag;
-
-	if (boo == 3 && flag == NULL)
+	if (boo == 3 && len == 0)
 	{
 		len += 2;
 		ft_putstr("0x");
-		flag = 1;
 	}
 	if (n < 0)
 	{
@@ -48,20 +45,3 @@ int	ft_putnb(long n, int base, int boo, int len)
 	len += ft_putchar(LOWBASE[n % base]);
 	return (len);
 }
-/*
-int	main(int ac, char *av[])
-{
-	int	number;
-
-	number = ft_atoi(av[1]);
-	if (ac < 2)
-	{
-		write(1, "Usage: ./a.out <number>\n", 24);
-		return (1);
-	}
-	ft_putnb((long)number, 16, 0, 0);
-	write(1, "\n", 1);
-	printf("%x \n", number);
-	return (0);
-}
-*/

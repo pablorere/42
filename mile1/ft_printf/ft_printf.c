@@ -30,7 +30,7 @@ int	ft_class(char input, va_list args)
 	else if (input == 'X')
 		return (ft_putnb((long)va_arg(args, unsigned int), 16, 1, 0));
 	else if (input == '%')
-		return (write(1, '%', 1));
+		return (write(1, &input, 1));
 	return (0);
 }
 
