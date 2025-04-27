@@ -24,5 +24,6 @@ int	ft_putchar(char c);
 int	ft_putstr(char *str);
 int	ft_putnb(long n, int base, int boo, int len);
 int	ft_printf(const char *input, ...);
+size_t ft_strlen(const char *str);
 
 #endif

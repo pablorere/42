@@ -1,9 +1,0 @@
-touch ft_lstnew.c
-touch ft_lstadd_back.c
-touch ft_lstadd_front.c 
-touch ft_lstclear.c
-touch ft_lstdelone.c
-touch ft_lstiter.c
-touch ft_lstlast.c
-touch ft_lstmap.c
-touch ft_lstsize.c

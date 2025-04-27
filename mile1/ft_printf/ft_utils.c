@@ -11,11 +11,20 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "libft.h"
 
 int	ft_putchar(char c)
 {
 	return (write(1, &c, 1));
+}
+
+size_t ft_strlen(const char *str)
+{
+	size_t i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
 }
 
 int	ft_putstr(char *str)
@@ -36,12 +45,10 @@ int	ft_putnb(long n, int base, int boo, int len)
 		n = -n;
 	}
 	if (n >= base)
-		len += ft_putnb(n / base, base, boo, len);
+		len = ft_putnb(n / base, base, boo, len);
 	if (boo == 1)
 		len += ft_putchar(UPBASE[n % base]);
-	else if (boo == 0)
+	else
 		len += ft_putchar(LOWBASE[n % base]);
-	return (len);
-	len += ft_putchar(LOWBASE[n % base]);
 	return (len);
 }

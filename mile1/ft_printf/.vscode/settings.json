@@ -57,10 +57,11 @@
   "C_Cpp_Runner.useLinkTimeOptimization": false,
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
-    "strim": "c",
-    "*.a": "c",
-    "stddef.h": "c"
-  },
+	"strim": "c",
+	"*.a": "c",
+	"stddef.h": "c",
+	"libft.h": "c"
+},
   "editor.tabSize": 4,
   "editor.insertSpaces": false,
   "editor.detectIndentation": false

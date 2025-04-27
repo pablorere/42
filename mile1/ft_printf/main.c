@@ -9,7 +9,7 @@ int main(void)
 	char *str = "Hello, world!";
 	void *ptr = &n;
 	unsigned int u = 4294967295U;
-	int d = -12345;
+	int d =  -2147483649;
 	int i = 6789;
 	unsigned int x = 0xdeadbeef;
 
