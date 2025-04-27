@@ -17,9 +17,9 @@ int	ft_putchar(char c)
 	return (write(1, &c, 1));
 }
 
-size_t ft_strlen(const char *str)
+size_t	ft_strlen(const char *str)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (str[i])
