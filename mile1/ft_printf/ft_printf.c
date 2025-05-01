@@ -19,7 +19,7 @@ int	ft_class(char input, va_list args)
 	else if (input == 's')
 		return (ft_putstr(va_arg(args, char *)));
 	else if (input == 'p')
-		return (ft_putnb((unsigned long)va_arg(args, void *), 16, 3, 0));
+		return (ft_putnb(va_arg(args, unsigned int), 16, 3, 0));
 	else if (input == 'd' || input == 'i')
 		return (ft_putnb((long)va_arg(args, int), 10, 0, 0));
 	else if (input == 'u')

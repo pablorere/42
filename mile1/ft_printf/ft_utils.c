@@ -29,19 +29,20 @@ size_t	ft_strlen(const char *str)
 
 int	ft_putstr(char *str)
 {
+	if(!str)
+		return(ft_putstr("(null)"));
 	return (write(1, str, ft_strlen(str)));
 }
 
 int	ft_putnb(long n, int base, int boo, int len)
 {
+	if (boo == 3 && len == 0 && n == 0)
+		return (ft_putstr("(nil)"));
 	if (boo == 3 && len == 0)
-	{
-		len += 2;
-		ft_putstr("0x");
-	}
+		len += ft_putstr("0x");
 	if (n < 0)
 	{
-		len += write(1, "-", 1);
+		len += write(1, '-', 1);
 		n = -n;
 	}
 	if (n >= base)

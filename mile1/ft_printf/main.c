@@ -16,12 +16,12 @@
 int main(void)
 {
 	int len1, len2;
-	int n = 42;
-	char c = 'A';
-	char *str = "Hello, world!";
-	void *ptr = &n;
+	int n = 0;
+	char c = 'O';
+	char *str = NULL ;
+	void *ptr = NULL;
 	unsigned int u = 4294967295U;
-	int d =  -2147483649;
+	int d =  -2147483648;
 	int i = 6789;
 	unsigned int x = 0xdeadbeef;
 
@@ -36,13 +36,13 @@ int main(void)
 	printf("ft_printf returned: %d | printf returned: %d\n\n", len1, len2);
 
 	// %s
-	len1 = ft_printf("ft_printf: %s\n", str);
 	len2 = printf("printf   : %s\n", str);
+	len1 = ft_printf("ft_printf: %s\n", str);
 	printf("ft_printf returned: %d | printf returned: %d\n\n", len1, len2);
 
 	// %p
-	len1 = ft_printf("ft_printf: %p\n", ptr);
 	len2 = printf("printf   : %p\n", ptr);
+	len1 = ft_printf("ft_printf: %p\n", ptr);
 	printf("ft_printf returned: %d | printf returned: %d\n\n", len1, len2);
 
 	// %d
