@@ -14,6 +14,7 @@ ARFLAGS = rcs
 OBJS = $(SRCS:.c=.o)
 
 $(NAME): $(OBJS)
+	echo "compilando la puta libreria"
 	$(AR) $(ARFLAGS) $(NAME) $(OBJS)
 
 clean:

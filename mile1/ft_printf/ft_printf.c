@@ -14,12 +14,14 @@
 
 int	ft_class(char input, va_list args)
 {
+	int	count;
+
 	if (input == 'c')
 		return (ft_putchar(va_arg(args, int)));
 	else if (input == 's')
 		return (ft_putstr(va_arg(args, char *)));
 	else if (input == 'p')
-		return (ft_putnb(va_arg(args, unsigned int), 16, 3, 0));
+		return (ft_putnb((unsigned long)va_arg(args, void *), 16, 3, 0));
 	else if (input == 'd' || input == 'i')
 		return (ft_putnb((long)va_arg(args, int), 10, 0, 0));
 	else if (input == 'u')
@@ -30,7 +32,9 @@ int	ft_class(char input, va_list args)
 		return (ft_putnb((long)va_arg(args, unsigned int), 16, 1, 0));
 	else if (input == '%')
 		return (write(1, &input, 1));
-	return (0);
+	else
+		count = write(1, &input, 1);
+	return (count);
 }
 
 int	ft_printf(const char *input, ...)
