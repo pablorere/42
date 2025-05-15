@@ -34,8 +34,10 @@ int	ft_atoi(const char *nptr)
 		n = n * 10 + (nptr[i++] - '0');
 	return (n * sign);
 }
-/*int	main(int ac, char **av)
+
+/* 
+int	main(int ac, char **av)
 {
 	printf("la originalllll: %d\n", atoi(av[1]));
 	printf("la mia: %d\n", ft_atoi(av[1]));
-}*/
+} */
