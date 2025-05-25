@@ -43,27 +43,19 @@ size_t	ft_strlen(const char *n)
 	return (i);
 }
 
-char	*ft_strdup(const char *s)
-{
-	char	*result;
-	size_t	i;
-
-	if (!s)
-		return (NULL);
-	i = ft_strlen(s);
-	result = malloc(i + 1);
-	if (!result)
-		return (NULL);
-	ft_memcpy((void *)result, (char *)s, i + 1);
-	return (result);
-}
-
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	len1;
 	size_t	len2;
 	char	*res;
 
+	if (!s1 && !s2)
+	{
+		res = malloc(1);
+		if (res)
+			res[0] = '\0';
+		return (res);
+	}
 	len1 = ft_strlen(s1);
 	len2 = ft_strlen(s2);
 	res = (char *)malloc(len1 + len2 + 1);
@@ -85,6 +77,12 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t outsize)
 	size_t	srcsize;
 	size_t	i;
 
+	if (!src)
+	{
+		if (outsize != 0 && dst)
+			dst[0] = '\0';
+		return (0);
+	}
 	srcsize = ft_strlen(src);
 	i = 0;
 	if (outsize != 0)
@@ -97,4 +95,18 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t outsize)
 		dst[i] = '\0';
 	}
 	return (srcsize);
+}
+
+int	ft_findnewline(const char *s)
+{
+	int	a;
+
+	a = 0;
+	while (s[a] != '\0')
+	{
+		if (s[a] == '\n')
+			return (a);
+		a++;
+	}
+	return (-1);
 }

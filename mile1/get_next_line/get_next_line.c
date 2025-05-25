@@ -17,41 +17,92 @@ void	update_buffer(char *buffer)
 	int	i;
 	int	j;
 
-	i = 0;
 	j = ft_findnewline(buffer);
 	if (j == -1)
 		return ;
-	i++;
-	while (buffer[i + j] != '\0')
-		buffer[i] = buffer[i + j++];
+	j++;
+	i = 0;
+	while (buffer[j])
+		buffer[i++] = buffer[j++];
 	buffer[i] = '\0';
+}
+
+static char	*gnl_init_line(char *buffer)
+{
+	char	*line;
+
+	if (buffer[0])
+		line = ft_strjoin(NULL, buffer);
+	else
+	{
+		line = malloc(1);
+		if (!line)
+			return (NULL);
+		line[0] = '\0';
+	}
+	return (line);
+}
+
+static char	*gnl_ra(int fd, char *buffer, char *line, int *bytes_read)
+{
+	char	*tmp;
+
+	while ((ft_findnewline(buffer) == -1) && *bytes_read != 0)
+	{
+		*bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (*bytes_read == -1)
+		{
+			buffer[0] = '\0';
+			free(line);
+			return (NULL);
+		}
+		buffer[*bytes_read] = '\0';
+		tmp = ft_strjoin(line, buffer);
+		free(line);
+		line = tmp;
+		if (!line)
+			return (NULL);
+	}
+	return (line);
+}
+
+static char	*gnl_trim_line(char *line, int *nl_pos)
+{
+	char	*tmp;
+
+	*nl_pos = ft_findnewline(line);
+	if (*nl_pos != -1)
+	{
+		tmp = malloc(*nl_pos + 2);
+		if (!tmp)
+		{
+			free(line);
+			return (NULL);
+		}
+		ft_strlcpy(tmp, line, *nl_pos + 2);
+		free(line);
+		line = tmp;
+	}
+	return (line);
 }
 
 char	*get_next_line(int fd)
 {
 	static char	buffer[BUFFER_SIZE + 1];
 	char		*line;
-	char		*tmp;
 	int			bytes_read;
+	int			nl_pos;
 
 	if (BUFFER_SIZE <= 0)
 		return (NULL);
 	bytes_read = 1;
-	line = NULL;
-	line = ft_strjoin(NULL, buffer);
-	while (ft_findnewline(buffer) == -1 && bytes_read != 0)
-	{
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read == -1)
-		{
-			free(line);
-			return (NULL);
-		}
-		buffer[bytes_read] = '\0';
-		tmp = ft_strjoin(line, buffer);
-		free(line);
-		line = tmp;
-	}
+	line = gnl_init_line(buffer);
+	if (!line)
+		return (NULL);
+	line = gnl_read_and_append(fd, buffer, line, &bytes_read);
+	if (!line)
+		return (NULL);
+	line = gnl_trim_line(line, &nl_pos);
 	if (!line || (line[0] == '\0' && bytes_read == 0))
 	{
 		free(line);
@@ -59,18 +110,4 @@ char	*get_next_line(int fd)
 	}
 	update_buffer(buffer);
 	return (line);
-}
-
-int	ft_findnewline(const char *s)
-{
-	int	a;
-
-	a = 0;
-	while (s[a] != '\0')
-	{
-		if (s[a] == '\n')
-			return (a);
-		a++;
-	}
-	return (-1);
 }
