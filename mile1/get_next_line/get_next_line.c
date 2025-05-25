@@ -99,7 +99,7 @@ char	*get_next_line(int fd)
 	line = gnl_init_line(buffer);
 	if (!line)
 		return (NULL);
-	line = gnl_read_and_append(fd, buffer, line, &bytes_read);
+	line = gnl_ra(fd, buffer, line, &bytes_read);
 	if (!line)
 		return (NULL);
 	line = gnl_trim_line(line, &nl_pos);
