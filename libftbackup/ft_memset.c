@@ -1,32 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
+/*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/04 17:31:43 by silvertape        #+#    #+#             */
-/*   Updated: 2025/05/10 16:07:31 by silvertape       ###   ########.fr       */
+/*   Created: 2025/04/08 20:45:33 by ppaula-s          #+#    #+#             */
+/*   Updated: 2025/04/08 21:13:14 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "libft.h"
 
-int	main(void)
+void	*ft_memset(void *dst, int c, size_t n)
 {
-	int		fd;
-	char	*h;
+	unsigned char	*p;
+	int				i;
 
-	fd = open("texto.txt", O_RDONLY);
-	if (fd < 0)
-		return (1);
-	h = get_next_line(fd);
-	while (h != NULL)
+	p = dst;
+	i = 0;
+	while (n > 0)
 	{
-		printf("%s", h);
-		free(h);
-		h = get_next_line(fd);
+		p[i] = (unsigned char) c;
+		i++;
+		n--;
 	}
-	close(fd);
-	return (0);
+	return (dst);
 }

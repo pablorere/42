@@ -1,0 +1,93 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/28 21:10:52 by silvertape        #+#    #+#             */
+/*   Updated: 2025/05/29 00:01:06 by silvertape       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <string.h>
+
+int	errorw(int pid)
+{
+	if (pid < 0)
+		fprintf(stderr, "error fork failed\n");
+	return (1);
+}
+
+void	elsee(int inout[], int pid, char str[])
+{
+	close(inout[1]);
+	read(inout[0], str, 22);
+	str[21] = '\0';
+	printf("Parent (PID: %i) received: %s\n", getpid(), str);
+	close(inout[0]);
+	waitpid(pid, NULL, 0);
+}
+
+int	main(void)
+{
+	int		inout[2];
+	int		pid;
+	char	str[22];
+
+	pipe(inout);
+	pid = fork();
+	if (pid == 0)
+		errorw(pid);
+	if (pid == 0)
+	{
+		close(inout[0]);
+		write(inout[1], "this is a new message\n", 22);
+		printf("Child PID: %i sent message\n", getpid());
+		close(inout[1]);
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		elsee(inout, pid, str);
+	}
+	return (EXIT_SUCCESS);
+}
+/* #include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+
+void    callexecve()
+{
+ char *const args[] = { "ls", NULL };
+ char *const envp[] = { NULL };
+ 
+ execve("/usr/bin/ls", args, envp);
+ perror("execve");
+    exit(EXIT_FAILURE); // Make sure to exit the child process if execve fails 
+}
+
+int main(void)
+{
+ pid_t pid;
+ 
+ printf("Hi I am the main process. My PID is :%d\n", getpid());
+ pid = fork();
+ if (pid == -1)
+  printf("Error while forking\n");
+ else if (pid == 0)
+ {
+  printf("I am the child. But now a new parent. My PID is :%d --- My child's PID is %d\n", getpid(), pid);
+  callexecve();
+ }
+ else if (pid > 1)
+ {
+  printf("I am the parent. My PID is :%d --- My child's PID is %d\n", getpid(), pid);
+  waitpid(pid, NULL, 0); 
+  printf("Got back the control?\n");
+ } */
