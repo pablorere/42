@@ -6,16 +6,19 @@
 /*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 00:43:10 by silvertape        #+#    #+#             */
-/*   Updated: 2025/05/29 04:21:59 by silvertape       ###   ########.fr       */
+/*   Updated: 2025/06/02 21:35:31 by silvertape       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	error(void)
+void	ft_error(int selector)
 {
 	perror("Error");
-	exit (EXIT_FAILURE);
+	if (selector == 127)
+		exit (127);
+	else
+		exit (EXIT_FAILURE);
 }
 
 char	*ft_local(char *cmd, char **envp)
@@ -54,18 +57,18 @@ void	ft_execute(char *av, char **envp)
 
 	cmd = ft_split(av, ' ');
 	if (!cmd)
-		error();
+		ft_error(1);
 	path = ft_local(cmd[0], envp);
 	if (!path)
 	{
 		free_cmd_array(cmd);
-		error();
+		ft_error(127);
 	}
 	if (execve(path, cmd, envp) == -1)
 	{
 		free(path);
 		free_cmd_array(cmd);
-		error();
+		ft_error(127);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 22:41:59 by silvertape        #+#    #+#             */
-/*   Updated: 2025/05/29 03:50:34 by silvertape       ###   ########.fr       */
+/*   Updated: 2025/06/02 21:35:01 by silvertape       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_parent(char **av, char **envp, int *straw)
 
 	output = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (output == -1)
-		error();
+		ft_error(1);
 	dup2(straw[0], 0);
 	dup2(output, 1);
 	close(straw[0]);
@@ -33,7 +33,7 @@ void	ft_child(char **av, char **envp, int *straw)
 
 	input = open(av[1], O_RDONLY);
 	if (input == -1)
-		error();
+		ft_error(1);
 	dup2(input, 0);
 	dup2(straw[1], 1);
 	close(input);
@@ -50,10 +50,10 @@ int	main(int ac, char **av, char **envp)
 	if (ac == 5)
 	{
 		if (pipe(straw) == -1)
-			error();
+			ft_error(1);
 		pid1 = fork();
 		if (pid1 == -1)
-			error();
+			ft_error(1);
 		if (pid1 == 0)
 			ft_child(av, envp, straw);
 		waitpid(pid1, NULL, 0);

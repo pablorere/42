@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 00:42:40 by silvertape        #+#    #+#             */
-/*   Updated: 2025/06/02 21:34:19 by silvertape       ###   ########.fr       */
+/*   Created: 2025/04/14 18:52:37 by ppaula-s          #+#    #+#             */
+/*   Updated: 2025/07/09 01:34:52 by silvertape       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "libft.h"
 
-# include <stdlib.h>
-# include <unistd.h>
-# include <string.h>
-# include <stdio.h>
-# include <sys/wait.h>
-# include <fcntl.h>
-# include "libft/libft.h"
+char	*ft_strchr(const char *s, int c)
+{
+	size_t	i;
 
-void	ft_error(int selector);
-void	ft_execute(char *av, char **envp);
-void	free_cmd_array(char **cmd);
-char	*free_choice(char **paths, char *path, int boolean);
+	i = 0;
+	if (!s)
+		return (NULL);
+	while (s[i])
+	{
+		if (s[i] == (char)c)
+			return ((char *)&s[i]);
+		i++;
+	}
+	if ((char)c == '\0')
+		return ((char *)&s[i]);
+	return (NULL);
+}
 
-#endif
