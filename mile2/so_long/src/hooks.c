@@ -6,7 +6,7 @@
 /*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:25:08 by silvertape        #+#    #+#             */
-/*   Updated: 2025/07/07 16:34:21 by silvertape       ###   ########.fr       */
+/*   Updated: 2025/07/21 15:10:58 by silvertape       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,18 @@
 **            xmove, ymove - movimiento a aplicar
 ** Retorna: nada (void)
 */
-void	limitwall(int *x, int *y, int xmove, int ymove)
+void	limitwall(t_data *data , int xmove, int ymove)
 {
-	*x = *x + xmove;
-	*y = *y + ymove;
-	if (*x < 0)
-		*x = 0;
-	if (*y < 0)
-		*y = 0;
-	if (*x >= 1216)
-		*x = 1216;
-	if (*y >= 656)
-		*y = 656;
+	data->position_x +=  xmove;
+	data->position_y +=  ymove;
+	if (data->position_x < 0)
+		data->position_x = 0;
+	if (data->position_y < 0)
+		data->position_y = 0;
+	if (data->position_x >= 1216)
+		data->position_x = 1216;
+	if (data->position_y >= 656)
+		data->position_y = 656;
 }
 
 /*
@@ -53,13 +53,13 @@ int	key_hook(int keycode, t_data *data)
 	if (keycode == KEY_ESC || keycode == KEY_CLICK)
 		exit(0);
 	if (keycode == KEY_W)
-		limitwall(&data->position_x, &data->position_y, 0, -64);
+		limitwall(data, 0, -TILE_SIZE);
 	else if (keycode == KEY_S)
-		limitwall(&data->position_x, &data->position_y, 0, 64);
+		limitwall(data , 0, TILE_SIZE);
 	else if (keycode == KEY_A)
-		limitwall(&data->position_x, &data->position_y, -64, 0);
+		limitwall(data , -TILE_SIZE, 0);
 	else if (keycode == KEY_D)
-		limitwall(&data->position_x, &data->position_y, 64, 0);
+		limitwall(data , TILE_SIZE, 0);
 	draw(data);
 	return (0);
 }

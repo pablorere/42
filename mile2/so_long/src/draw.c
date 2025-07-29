@@ -6,7 +6,7 @@
 /*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:25:04 by silvertape        #+#    #+#             */
-/*   Updated: 2025/07/09 23:10:33 by silvertape       ###   ########.fr       */
+/*   Updated: 2025/07/20 19:18:50 by silvertape       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,29 @@ void	fileloader(t_data *data)
 	int	y;
 
 	data->character = mlx_xpm_file_to_image(data->mlx,
-			"textures/character_simple.xpm", &x, &y);
+			"textures/player_up.xpm", &x, &y);
 	data->floor = mlx_xpm_file_to_image(data->mlx,
-			"textures/floor_simple.xpm", &x, &y);
+			"textures/floor.xpm", &x, &y);
 	data->wall = mlx_xpm_file_to_image(data->mlx,
-			"textures/wall_simple.xpm", &x, &y);
+			"textures/wall.xpm", &x, &y);
+	data->coin = mlx_xpm_file_to_image(data->mlx,
+			"textures/coin.xpm", &x, &y);
+	data->exit = mlx_xpm_file_to_image(data->mlx,
+			"textures/exit_closed.xpm", &x, &y);
+	data->exit_open = mlx_xpm_file_to_image(data->mlx,
+			"textures/exit_opened.xpm", &x, &y);
 	if (!data->wall)
 		write(1, "Error: No se pudo cargar wall.xpm\n", 34); 
 	if (!data->floor)
 		write(1, "Error: No se pudo cargar floor.xpm\n", 35);
 	if (!data->character)
 		write(1, "Error: No se pudo cargar character.xpm\n", 39);
+	if (!data->coin)
+		write(1, "Error: No se pudo cargar coin.xpm\n", 34);
+	if (!data->exit)
+		write(1, "Error: No se pudo cargar exit_closed.xpm\n", 41);
+	if (!data->exit_open)
+		write(1, "Error: No se pudo cargar exit_opened.xpm\n", 41);
 }
 
 /*
@@ -88,6 +100,18 @@ void	draw_map(t_data *data)
 			if (data->map[y][x] == '1' && data->wall)
 				mlx_put_image_to_window(data->mlx, data->window,
 					data->wall, sx, sy);
+			if (data->map[y][x] == 'C' && data->coin)
+				mlx_put_image_to_window(data->mlx, data->window,
+					data->coin, sx, sy);
+			if (data->map[y][x] == 'E')
+			{
+				if (data->coins_collected >= data->total_coins && data->exit_open)
+					mlx_put_image_to_window(data->mlx, data->window,
+						data->exit_open, sx, sy);
+				else if (data->exit)
+					mlx_put_image_to_window(data->mlx, data->window,
+						data->exit, sx, sy);
+			}
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:16:20 by silvertape        #+#    #+#             */
-/*   Updated: 2025/07/09 02:29:15 by silvertape       ###   ########.fr       */
+/*   Updated: 2025/07/21 15:19:41 by silvertape       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,20 @@ typedef struct s_data
 	int		i;
 	int		map_height;
 	int		map_width;
+	int		coins_collected;
+	int		total_coins;
 
 	void	*character;
 	void	*floor;
 	void	*wall;
+	void	*coin;
+	void	*exit;
+	void	*exit_open;
 	char	**map;
 }	t_data;
 
 // Funciones
-void	limitwall(int *x, int *y, int xmove, int ymove);
+void	limitwall(t_data *s_data, int xmove, int ymove);
 int		key_hook(int keycode, t_data *data);
 void	draw(t_data *data);
 void	draw_map(t_data *data);
@@ -58,5 +63,6 @@ int		close_hook(void *param);
 int		init_mlx(t_data *data);
 void	setup_game(t_data *data);
 int		find_player_position(t_data *data);
+int		count_total_coins(char **map);
 void	floodfill(char **map, int x, int y);
-int		check_floodfill(char *filename, int map_height, int map_width __attribute__((unused)));
+int	check_floodfill(char *filename, int map_height, int map_width __attribute__((unused)));

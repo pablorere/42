@@ -5,23 +5,32 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/09 02:47:04 by silvertape        #+#    #+#             */
-/*   Updated: 2025/07/09 23:11:54 by silvertape       ###   ########.fr       */
+/*   Created: 2025/07/07 16:21:01 by silvertape        #+#    #+#             */
+/*   Updated: 2025/07/21 15:02:14 by silvertape       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
+/*
+** Valida que el nombre del archivo tenga extensión .ber
+** Parámetros: filename - nombre del archivo a validar
+** Retorna: 1 si tiene extensión .ber, 0 si no
+*/
 int	validate_ber_extension(char *filename)
 {
 	int	len;
 
-	len = ft_strlen(filename);
-	if (!filename || len < 4)
+	if (!filename || (len = ft_strlen(filename)) < 4)
 		return (0);
 	return (!ft_strncmp(filename + len - 4, ".ber", 4));
 }
 
+/*
+** Libera la memoria de un array de strings del mapa
+** Parámetros: map - array de strings a liberar
+** Retorna: nada (void)
+*/
 void	free_map(char **map)
 {
 	int	i;
@@ -34,6 +43,11 @@ void	free_map(char **map)
 	free(map);
 }
 
+/*
+** Encuentra la posición del jugador ('P') en el mapa
+** Parámetros: data - estructura con el mapa y donde guardar la posición
+** Retorna: 1 si encontró al jugador, 0 si no
+*/
 int	find_player_position(t_data *data)
 {
 	int	x;
@@ -42,6 +56,8 @@ int	find_player_position(t_data *data)
 	y = -1;
 	while (++y < data->map_height)
 	{
+		write(1, data->map[y], ft_strlen(data->map[y]));
+		write(1, "\n", 1);
 		x = -1;
 		while (++x < data->map_width)
 		{
@@ -65,6 +81,5 @@ void	floodfill(char **map, int x, int y)
 	floodfill(map, x - 1, y);
 	floodfill(map, x, y + 1);
 	floodfill(map, x, y - 1);
+	return ;
 }
-
-int iswalkable()

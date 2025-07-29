@@ -6,7 +6,7 @@
 /*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:25:00 by silvertape        #+#    #+#             */
-/*   Updated: 2025/07/09 02:46:53 by silvertape       ###   ########.fr       */
+/*   Updated: 2025/07/21 15:19:39 by silvertape       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	setup_game(t_data *data)
 		write(2, "Error: No se encontró al jugador (P) en el mapa\n", 48);
 		return ;
 	}
+	fileloader(data);
 	draw(data);
 	mlx_key_hook(data->window, key_hook, data);
 	mlx_hook(data->window, 17, 0, close_hook, data);
