@@ -56,9 +56,13 @@
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
 "C_Cpp_Runner.msvcSecureNoWarnings": false,
+"42header.username": "ppaula-s",
+"42header.email": "ppaula-s@student.42urduliz.com",
 "files.associations": {
-	"ft_printf.h": "c",
-	"stdarg.h": "c",
-	"libft.h": "c"
-}
+  "ft_printf.h": "c",
+  "stdarg.h": "c",
+  "libft.h": "c",
+  "philo.h": "c"
+},
+"C_Cpp.errorSquiggles": "disabled"
 }
