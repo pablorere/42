@@ -10,17 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "libft.h"
 
 void	update_buffer(char *buffer)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	*newline_pos;
 
-	j = ft_findnewline(buffer);
-	if (j == -1)
+	newline_pos = ft_strchr(buffer, '\n');
+	if (!newline_pos)
 		return ;
-	j++;
+	j = newline_pos - buffer + 1;
 	i = 0;
 	while (buffer[j])
 		buffer[i++] = buffer[j++];
@@ -32,7 +33,7 @@ static char	*gnl_init_line(char *buffer)
 	char	*line;
 
 	if (buffer[0])
-		line = ft_strjoin(NULL, buffer);
+		line = ft_strdup(buffer);
 	else
 	{
 		line = malloc(1);
@@ -47,7 +48,7 @@ static char	*gnl_ra(int fd, char *buffer, char *line, int *bytes_read)
 {
 	char	*tmp;
 
-	while ((ft_findnewline(buffer) == -1) && *bytes_read != 0)
+	while (!ft_strchr(buffer, '\n') && *bytes_read != 0)
 	{
 		*bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (*bytes_read == -1)
@@ -69,10 +70,12 @@ static char	*gnl_ra(int fd, char *buffer, char *line, int *bytes_read)
 static char	*gnl_trim_line(char *line, int *nl_pos)
 {
 	char	*tmp;
+	char	*newline_pos;
 
-	*nl_pos = ft_findnewline(line);
-	if (*nl_pos != -1)
+	newline_pos = ft_strchr(line, '\n');
+	if (newline_pos)
 	{
+		*nl_pos = newline_pos - line;
 		tmp = malloc(*nl_pos + 2);
 		if (!tmp)
 		{
@@ -83,10 +86,12 @@ static char	*gnl_trim_line(char *line, int *nl_pos)
 		free(line);
 		line = tmp;
 	}
+	else
+		*nl_pos = -1;
 	return (line);
 }
 
-char	*get_next_line(int fd)
+char	*ft_get_next_line(int fd)
 {
 	static char	buffer[BUFFER_SIZE + 1];
 	char		*line;
@@ -111,7 +116,9 @@ char	*get_next_line(int fd)
 	update_buffer(buffer);
 	return (line);
 }
+
 /* 
+
 int	main(int ac, char **av)
 {
 	int		fd;

@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"ventanillas.h": "c",
+		"mlx.h": "c",
+		"stdlib.h": "c",
+		"mlx_int.h": "c"
+	}
+}
