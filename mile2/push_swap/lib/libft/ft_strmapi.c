@@ -1,40 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/13 18:09:20 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/05/23 15:50:09 by silvertape       ###   ########.fr       */
+/*   Created: 2025/04/16 16:01:32 by ppaula-s          #+#    #+#             */
+/*   Updated: 2025/05/15 03:10:27 by silvertape       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "libft.h"
-#define space (nptr[i] == 32 || (nptr[i] >= 9 && nptr[i] <= 13))
 
-int	ft_atoi(const char *nptr)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	int	i;
-	int	sign;
-	int	n;
+	char			*res;
+	unsigned int	i;
 
+	if (!s || !f)
+		return (NULL);
+	res = (char *)malloc(ft_strlen(s) + 1);
+	if (!res)
+		return (NULL);
 	i = 0;
-	n = 0;
-	while (space)
+	while (s[i])
+	{
+		res[i] = f(i, s[i]);
 		i++;
-	sign = 1 - 2 * (nptr[i] == '-');
-	i += nptr[i] == '+' || nptr[i] == '-';
-	while (ft_isdigit(nptr[i]))
-		n = n * 10 + (nptr[i++] - '0');
-	return (n * sign);
+	}
+	res[i] = '\0';
+	return (res);
 }
-
-/* 
-int	main(void)
-{
-	printf("la originalllll: %d\n", atoi(NULL));
-	printf("la mia: %d\n", ft_atoi(NULL));
-}
- */

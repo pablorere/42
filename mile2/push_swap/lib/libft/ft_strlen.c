@@ -1,40 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/13 18:09:20 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/05/23 15:50:09 by silvertape       ###   ########.fr       */
+/*   Created: 2025/04/07 17:11:06 by ppaula-s          #+#    #+#             */
+/*   Updated: 2025/05/15 03:10:08 by silvertape       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "libft.h"
-#define space (nptr[i] == 32 || (nptr[i] >= 9 && nptr[i] <= 13))
 
-int	ft_atoi(const char *nptr)
+size_t	ft_strlen(const char *s)
 {
-	int	i;
-	int	sign;
-	int	n;
+	size_t	i;
 
 	i = 0;
-	n = 0;
-	while (space)
+	while (s[i])
 		i++;
-	sign = 1 - 2 * (nptr[i] == '-');
-	i += nptr[i] == '+' || nptr[i] == '-';
-	while (ft_isdigit(nptr[i]))
-		n = n * 10 + (nptr[i++] - '0');
-	return (n * sign);
+	return (i);
 }
-
-/* 
-int	main(void)
-{
-	printf("la originalllll: %d\n", atoi(NULL));
-	printf("la mia: %d\n", ft_atoi(NULL));
-}
- */
