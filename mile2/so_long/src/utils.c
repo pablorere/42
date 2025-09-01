@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
+/*   By: ppaula-s <ppaula-s@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:21:01 by silvertape        #+#    #+#             */
-/*   Updated: 2025/07/21 15:02:14 by silvertape       ###   ########.fr       */
+/*   Updated: 2025/09/01 17:29:58 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ int	validate_ber_extension(char *filename)
 {
 	int	len;
 
-	if (!filename || (len = ft_strlen(filename)) < 4)
+	if (!filename)
+		return (0);
+	len = ft_strlen(filename);
+	if (len < 4)
 		return (0);
 	return (!ft_strncmp(filename + len - 4, ".ber", 4));
 }
@@ -56,8 +59,6 @@ int	find_player_position(t_data *data)
 	y = -1;
 	while (++y < data->map_height)
 	{
-		write(1, data->map[y], ft_strlen(data->map[y]));
-		write(1, "\n", 1);
 		x = -1;
 		while (++x < data->map_width)
 		{

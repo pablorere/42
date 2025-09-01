@@ -3,29 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
+/*   By: ppaula-s <ppaula-s@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:25:15 by silvertape        #+#    #+#             */
-/*   Updated: 2025/07/21 15:10:58 by silvertape       ###   ########.fr       */
+/*   Updated: 2025/09/01 16:59:59 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-int count_total_coins(char **map)
+int	count_total_coins(char **map)
 {
-    int y = 0, x, count = 0;
-    if (!map) return 0;
-    while (map[y]) {
-        x = 0;
-        while (map[y][x]) {
-            if (map[y][x] == 'C')
-                count++;
-            x++;
-        }
-        y++;
-    }
-    return count;
+	int	y;
+	int	x;
+	int	count;
+
+	y = 0;
+	count = 0;
+	if (!map)
+		return (0);
+	while (map[y])
+	{
+		x = 0;
+		while (map[y][x])
+		{
+			if (map[y][x] == 'C')
+				count++;
+			x++;
+		}
+		y++;
+	}
+	return (count);
 }
 
 /*

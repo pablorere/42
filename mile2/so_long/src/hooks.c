@@ -3,51 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
+/*   By: ppaula-s <ppaula-s@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/07 16:25:08 by silvertape        #+#    #+#             */
-/*   Updated: 2025/07/21 15:10:58 by silvertape       ###   ########.fr       */
+/*   Created: 2025/09/01 17:27:55 by ppaula-s          #+#    #+#             */
+/*   Updated: 2025/09/01 17:50:09 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-/*
-** Mueve las coordenadas x,y aplicando límites de pantalla
-** Parámetros: x, y - punteros a coordenadas actuales
-**            xmove, ymove - movimiento a aplicar
-** Retorna: nada (void)
-*/
-void	limitwall(t_data *data , int xmove, int ymove)
+void	limitwall(t_data *data, int xmove, int ymove)
 {
-	data->position_x +=  xmove;
-	data->position_y +=  ymove;
-	if (data->position_x < 0)
-		data->position_x = 0;
-	if (data->position_y < 0)
-		data->position_y = 0;
-	if (data->position_x >= 1216)
-		data->position_x = 1216;
-	if (data->position_y >= 656)
-		data->position_y = 656;
+	int	nx;
+	int	ny;
+	int	mx;
+	int	my;
+
+	nx = data->position_x + xmove;
+	ny = data->position_y + ymove;
+	mx = nx / TILE_SIZE;
+	my = ny / TILE_SIZE;
+	if (out_of_bounds(data, mx, my))
+		return ;
+	if (data->map[my][mx] == '1')
+		return ;
+	if (is_exit_blocked(data, data->map[my][mx]))
+		return ;
+	if (data->map[my][mx] == 'E')
+		win_and_exit(data, nx, ny);
+	collect_coin(data, mx, my);
+	perform_move(data, nx, ny);
 }
 
-/*
-** Hook para cerrar la ventana (botón X)
-** Parámetros: param - parámetro no usado
-** Retorna: 0 (nunca se ejecuta debido a exit)
-*/
 int	close_hook(void *param)
 {
 	(void)param;
 	exit(0);
 }
 
-/*
-** Hook para manejar las teclas presionadas (WASD y ESC)
-** Parámetros: keycode - código de la tecla presionada, data - datos del juego
-** Retorna: 0 siempre
-*/
 int	key_hook(int keycode, t_data *data)
 {
 	if (keycode == KEY_ESC || keycode == KEY_CLICK)
@@ -55,11 +48,11 @@ int	key_hook(int keycode, t_data *data)
 	if (keycode == KEY_W)
 		limitwall(data, 0, -TILE_SIZE);
 	else if (keycode == KEY_S)
-		limitwall(data , 0, TILE_SIZE);
+		limitwall(data, 0, TILE_SIZE);
 	else if (keycode == KEY_A)
-		limitwall(data , -TILE_SIZE, 0);
+		limitwall(data, -TILE_SIZE, 0);
 	else if (keycode == KEY_D)
-		limitwall(data , TILE_SIZE, 0);
+		limitwall(data, TILE_SIZE, 0);
 	draw(data);
 	return (0);
 }

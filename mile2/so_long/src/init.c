@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
+/*   By: ppaula-s <ppaula-s@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:25:00 by silvertape        #+#    #+#             */
-/*   Updated: 2025/07/21 15:19:39 by silvertape       ###   ########.fr       */
+/*   Updated: 2025/09/01 17:32:53 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	init_mlx(t_data *data)
 
 	data->position_x = 0;
 	data->position_y = 0;
+	data->move_count = 0;
 	data->mlx = mlx_init();
 	if (!data->mlx)
 	{
