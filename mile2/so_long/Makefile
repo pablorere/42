@@ -2,7 +2,7 @@ NAME = so_long
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
 RM = rm -f
-SRC = src/main.c src/utils.c src/map_loader.c src/draw.c src/hooks.c src/init.c src/validation.c src/move.c
+SRC = src/main.c src/utils.c src/map_loader.c src/draw.c src/hooks.c src/init.c src/validation.c src/move.c src/fileloader.c src/setup.c src/draw_game.c
 OBJS = $(SRC:.c=.o)
 MLXFLAGS = -L lib/mlx -lmlx -lX11 -lXext -lm
 LIBFT = lib/libftfull/libft/libft.a

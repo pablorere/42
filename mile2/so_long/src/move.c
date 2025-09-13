@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   move.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaula-s <ppaula-s@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 18:06:00 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/09/01 17:55:08 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/09/13 16:05:44 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,11 @@ void	win_and_exit(t_data *data, int new_x, int new_y)
 	data->position_x = new_x;
 	data->position_y = new_y;
 	data->move_count++;
-	printf("Movimientos válidos: %d\n", data->move_count);
-	printf("Has recogido todas las monedas. ¡Victoria!\n");
 	draw(data);
+	ft_putstr_fd("¡Felicidades! Has completado el juego en ", 1);
+	ft_putnbr_fd(data->move_count, 1);
+	ft_putstr_fd(" movimientos.\n", 1);
+	cleanup_resources(data);
 	exit(0);
 }
 

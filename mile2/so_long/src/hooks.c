@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaula-s <ppaula-s@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 17:27:55 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/09/01 17:50:09 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/09/13 15:46:57 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,20 @@ void	limitwall(t_data *data, int xmove, int ymove)
 
 int	close_hook(void *param)
 {
-	(void)param;
+	t_data	*data;
+
+	data = (t_data *)param;
+	cleanup_resources(data);
 	exit(0);
 }
 
 int	key_hook(int keycode, t_data *data)
 {
 	if (keycode == KEY_ESC || keycode == KEY_CLICK)
+	{
+		cleanup_resources(data);
 		exit(0);
+	}
 	if (keycode == KEY_W)
 		limitwall(data, 0, -TILE_SIZE);
 	else if (keycode == KEY_S)

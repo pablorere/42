@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaula-s <ppaula-s@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:21:01 by silvertape        #+#    #+#             */
-/*   Updated: 2025/09/01 17:29:58 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/09/13 16:03:35 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int	find_player_position(t_data *data)
 			{
 				data->position_x = x * TILE_SIZE;
 				data->position_y = y * TILE_SIZE;
+				data->map[y][x] = '0';
 				return (1);
 			}
 		}
@@ -83,4 +84,34 @@ void	floodfill(char **map, int x, int y)
 	floodfill(map, x, y + 1);
 	floodfill(map, x, y - 1);
 	return ;
+}
+
+/*
+** Libera todos los recursos antes de salir
+** Parámetros: data - estructura con todos los recursos
+** Retorna: nada (void)
+*/
+void	cleanup_resources(t_data *data)
+{
+	if (data->character)
+		mlx_destroy_image(data->mlx, data->character);
+	if (data->floor)
+		mlx_destroy_image(data->mlx, data->floor);
+	if (data->wall)
+		mlx_destroy_image(data->mlx, data->wall);
+	if (data->coin)
+		mlx_destroy_image(data->mlx, data->coin);
+	if (data->exit)
+		mlx_destroy_image(data->mlx, data->exit);
+	if (data->exit_open)
+		mlx_destroy_image(data->mlx, data->exit_open);
+	if (data->window)
+		mlx_destroy_window(data->mlx, data->window);
+	if (data->mlx)
+	{
+		mlx_destroy_display(data->mlx);
+		free(data->mlx);
+	}
+	if (data->map)
+		free_map(data->map);
 }
