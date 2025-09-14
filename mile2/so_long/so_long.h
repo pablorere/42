@@ -6,7 +6,7 @@
 /*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:16:20 by silvertape        #+#    #+#             */
-/*   Updated: 2025/09/13 15:51:40 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/09/14 17:05:18 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,14 @@ void	setup_game(t_data *data);
 int		find_player_position(t_data *data);
 int		count_total_coins(char **map);
 void	floodfill(char **map, int x, int y);
+
+/* Validation */
+int		validate_map_config(t_data *data);
+int		validate_rectangular(t_data *data);
+int		validate_chars_counts(t_data *data, int *pc, int *ec, int *cc);
+int		validate_closed_walls(t_data *data);
 int		check_floodfill(char *filename, int map_height, int map_width);
+void	print_error(const char *msg);
 void	cleanup_resources(t_data *data);
 
 /* movement helpers */

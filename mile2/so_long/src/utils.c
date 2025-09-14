@@ -6,7 +6,7 @@
 /*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:21:01 by silvertape        #+#    #+#             */
-/*   Updated: 2025/09/13 16:03:35 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/09/14 17:05:18 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,13 @@ int	find_player_position(t_data *data)
 
 void	floodfill(char **map, int x, int y)
 {
+	int	row_len;
+
+	if (x < 0 || !map || !map[x])
+		return ;
+	row_len = (int)ft_strlen(map[x]);
+	if (y < 0 || y >= row_len)
+		return ;
 	if (map[x][y] == '1' || map[x][y] == 'X')
 		return ;
 	map[x][y] = 'X';

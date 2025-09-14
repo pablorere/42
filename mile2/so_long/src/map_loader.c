@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_loader.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
+/*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:25:00 by silvertape        #+#    #+#             */
-/*   Updated: 2025/07/09 02:29:16 by silvertape       ###   ########.fr       */
+/*   Updated: 2025/09/14 17:13:01 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,13 +100,23 @@ int	load_map(t_data *data, char *filename)
 {
 	if (!validate_ber_extension(filename))
 	{
-		write(2, "Error: El archivo debe tener extensión .ber\n", 44);
+		write(2, "Error: El archivo debe tener extensión .ber\n", 45);
 		return (0);
 	}
 	if (!open_and_read_map(filename, data))
 		return (0);
+	if (!validate_map_config(data))
+	{
+		if (data->map)
+			free_map(data->map);
+		data->map = NULL;
+		return (0);
+	}
 	if (!check_floodfill(filename, data->map_height, data->map_width))
 	{
+		if (data->map)
+			free_map(data->map);
+		data->map = NULL;
 		write(2, "Error: El mapa no es válido (elementos inaccesibles)\n", 53);
 		return (0);
 	}
