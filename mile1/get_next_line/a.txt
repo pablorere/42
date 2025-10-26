@@ -1,0 +1,5 @@
+crea un buffer
+lee dentro de ese buffer buscando un \n
+si no lo encuentra junta los buffers ya leidos y devuelve sin salto de linea
+si lo encuentra recorta el buffer y devuelve todos los
+buffers anteriores juntos seguido de un salto de linea
