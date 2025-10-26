@@ -1,0 +1,8 @@
+criar uma estrutua
+inicializar as variaveis dentro das estruturas
+
+criar uma rotina (come dorme pensa)
+imprime cada iteracao
+
+simulacao
+inicializar um tread para cada filosofo
