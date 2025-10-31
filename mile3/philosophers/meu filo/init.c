@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 23:35:50 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/10/22 23:35:51 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/10/26 15:39:56 by silvertape       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ void	parse_arguments(t_data *data, char **av)
 		data->limit_meals = ft_atoi(av[5]);
 	else
 		data->limit_meals = -1;
-	if (data->philo_nbr < 1 || data->philo_nbr > 200)
-		ft_error("Error: Number of philosophers must be between 1 and 200\n");
 	if (data->time_to_die < 60 || data->time_to_eat < 60
 		|| data->time_to_sleep < 60)
 		ft_error("Error: Times must be at least 60ms\n");

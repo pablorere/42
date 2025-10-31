@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 00:00:00 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/10/22 23:36:39 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/10/26 15:31:00 by silvertape       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	*philosopher_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (philo->id % 2 == 0)
-		ft_usleep(100);
+	/*if (philo->id % 2 == 0)
+		ft_usleep(100);*/
 	while (!check_simulation_end(philo->data))
 	{
 		philo_think(philo);
