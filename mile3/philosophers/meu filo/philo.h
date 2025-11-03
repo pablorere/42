@@ -65,7 +65,7 @@ void	philo_sleep(t_philo *philo);
 void	philo_think(t_philo *philo);
 void	*philosopher_routine(void *arg);
 long	get_time(void);
-void	ft_usleep(long ms);
+void	ft_usleep(long ms, t_data *data);
 void	print_status(t_philo *philo, char *status);
 int		ft_atoi(const char *str);
 void	ft_error(char *msg);
