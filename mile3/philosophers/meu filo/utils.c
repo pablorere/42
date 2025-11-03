@@ -29,7 +29,7 @@ void	ft_usleep(long ms, t_data *data)
 	{
 		if (check_simulation_end(data))
 			break ;
-		usleep(100);
+		usleep(50);
 	}
 }
 

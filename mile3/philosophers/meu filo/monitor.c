@@ -21,10 +21,10 @@ bool	check_death(t_data *data)
 	i = 0;
 	while (i < data->philo_nbr)
 	{
+		current_time = get_time();
 		pthread_mutex_lock(&data->meal_mutex);
 		last_meal = data->philos[i].last_meal_time;
 		pthread_mutex_unlock(&data->meal_mutex);
-		current_time = get_time();
 		if (current_time - last_meal > data->time_to_die)
 		{
 			pthread_mutex_lock(&data->print_mutex);
