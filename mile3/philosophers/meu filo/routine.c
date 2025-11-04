@@ -44,14 +44,14 @@ void	philo_eat(t_philo *philo)
 	philo->last_meal_time = get_time();
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->data->meal_mutex);
-	ft_usleep(philo->data->time_to_eat);
+	ft_usleep(philo->data->time_to_eat, philo->data);
 	drop_forks(philo);
 }
 
 void	philo_sleep(t_philo *philo)
 {
 	print_status(philo, "is sleeping");
-	ft_usleep(philo->data->time_to_sleep);
+	ft_usleep(philo->data->time_to_sleep, philo->data);
 }
 
 void	philo_think(t_philo *philo)
