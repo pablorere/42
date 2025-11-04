@@ -1,3 +1,4 @@
 mile3/philosophers/a.out
 *.o
 mile3/philosophers/meu filo/philo
+mile3/philosophers/meu filo/philo_tsan
