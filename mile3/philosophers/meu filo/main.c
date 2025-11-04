@@ -39,7 +39,11 @@ void	*philosopher_routine(void *arg)
 	while (!check_simulation_end(philo->data))
 	{
 		philo_think(philo);
+		if (check_simulation_end(philo->data))
+			break ;
 		philo_eat(philo);
+		if (check_simulation_end(philo->data))
+			break ;
 		philo_sleep(philo);
 	}
 	return (NULL);
