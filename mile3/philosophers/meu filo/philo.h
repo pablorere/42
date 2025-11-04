@@ -58,7 +58,7 @@ bool	check_death(t_data *data);
 bool	check_all_ate(t_data *data);
 bool	check_simulation_end(t_data *data);
 void	*monitor_routine(void *arg);
-void	take_forks(t_philo *philo);
+bool	take_forks(t_philo *philo);
 void	drop_forks(t_philo *philo);
 void	philo_eat(t_philo *philo);
 void	philo_sleep(t_philo *philo);

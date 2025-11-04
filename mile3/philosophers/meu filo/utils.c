@@ -35,20 +35,15 @@ void	ft_usleep(long ms, t_data *data)
 
 void	print_status(t_philo *philo, char *status)
 {
+	pthread_mutex_lock(&philo->data->print_mutex);
 	pthread_mutex_lock(&philo->data->end_mutex);
 	if (!philo->data->simulation_end)
 	{
-		pthread_mutex_unlock(&philo->data->end_mutex);
-		pthread_mutex_lock(&philo->data->print_mutex);
-		pthread_mutex_lock(&philo->data->end_mutex);
-		if (!philo->data->simulation_end)
-			printf("%ld %d %s\n", get_time() - philo->data->start_time,
-				philo->id, status);
-		pthread_mutex_unlock(&philo->data->end_mutex);
-		pthread_mutex_unlock(&philo->data->print_mutex);
+		printf("%ld %d %s\n", get_time() - philo->data->start_time,
+			philo->id, status);
 	}
-	else
-		pthread_mutex_unlock(&philo->data->end_mutex);
+	pthread_mutex_unlock(&philo->data->end_mutex);
+	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
 void	ft_error(char *msg)
