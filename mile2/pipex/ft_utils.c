@@ -42,7 +42,7 @@ char	*ft_local(char *cmd, char **envp)
 		part_path = ft_strjoin(paths[i], "/");
 		path = ft_strjoin(part_path, cmd);
 		free(part_path);
-		if (path && access(path, F_OK) == 0)
+		if (path && access(path, X_OK) == 0)
 			return (free_choice(paths, path, 1));
 		free(path);
 	}
