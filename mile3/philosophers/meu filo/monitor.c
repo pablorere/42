@@ -17,6 +17,7 @@ bool	check_death(t_data *data)
 	int		i;
 	long	current_time;
 	long	last_meal;
+	bool	is_dead;
 
 	i = 0;
 	while (i < data->philo_nbr)
@@ -24,8 +25,9 @@ bool	check_death(t_data *data)
 		current_time = get_time();
 		pthread_mutex_lock(&data->meal_mutex);
 		last_meal = data->philos[i].last_meal_time;
+		is_dead = (current_time - last_meal > data->time_to_die);
 		pthread_mutex_unlock(&data->meal_mutex);
-		if (current_time - last_meal > data->time_to_die)
+		if (is_dead)
 		{
 			pthread_mutex_lock(&data->print_mutex);
 			printf("%ld %d died\n", current_time - data->start_time,

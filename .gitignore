@@ -1,3 +1,6 @@
 mile3/philosophers/a.out
 *.o
 mile3/philosophers/meu filo/philo
+*.a
+pipex
+pipex_bonus

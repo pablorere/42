@@ -34,6 +34,13 @@ void	*philosopher_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	if (philo->data->philo_nbr == 1)
+	{
+		print_status(philo, "has taken a fork");
+		while (!check_simulation_end(philo->data))
+			usleep(1000);
+		return (NULL);
+	}
 	if (philo->id % 2 == 0)
 		ft_usleep(1, philo->data);
 	while (!check_simulation_end(philo->data))
