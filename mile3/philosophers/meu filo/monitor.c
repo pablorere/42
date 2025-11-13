@@ -6,7 +6,7 @@
 /*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 23:14:35 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/10/22 23:34:19 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/11/10 12:33:11 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ bool	check_all_ate(t_data *data)
 		pthread_mutex_lock(&data->end_mutex);
 		data->simulation_end = true;
 		pthread_mutex_unlock(&data->end_mutex);
+
 		return (true);
 	}
 	return (false);
@@ -103,3 +104,8 @@ void	start_simulation(t_data *data)
 		i++;
 	}
 }
+
+
+/* toctou
+	printf guarrada
+	*/
