@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppaula-s <ppaula-s@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 23:15:22 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/10/22 23:36:26 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/11/18 12:27:27 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,16 @@ int	ft_atoi(const char *str)
 	if (*str == '-' || *str == '+')
 	{
 		if (*str == '-')
-			sign = -1;
+			return (0);
 		str++;
 	}
 	while (*str >= '0' && *str <= '9')
+	{
+		if (res > INT_MAX / 10)
+			return (0);
 		res = res * 10 + (*str++ - '0');
+	}
+	if (*str <= 48 && *str >= 57)
+		return (0);
 	return (res * sign);
 }

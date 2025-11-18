@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
+/*   By: ppaula-s <ppaula-s@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 00:00:00 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/10/26 15:31:00 by silvertape       ###   ########.fr       */
+/*   Updated: 2025/11/18 11:33:30 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,26 @@ bool	check_simulation_end(t_data *data)
 	end = data->simulation_end;
 	pthread_mutex_unlock(&data->end_mutex);
 	return (end);
+}
+
+void	start_simulation(t_data *data)
+{
+	int			i;
+	pthread_t	monitor_thread;
+
+	i = 0;
+	while (i < data->philo_nbr)
+	{
+		pthread_create(&data->philos[i].thread, NULL,
+			philosopher_routine, &data->philos[i]);
+		i++;
+	}
+	pthread_create(&monitor_thread, NULL, monitor_routine, data);
+	pthread_join(monitor_thread, NULL);
+	i = 0;
+	while (i < data->philo_nbr)
+	{
+		pthread_join(data->philos[i].thread, NULL);
+		i++;
+	}
 }

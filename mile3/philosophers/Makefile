@@ -1,30 +1,31 @@
 NAME = philo
+OBJ_DIR = obj
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -pthread
 RM = rm -f
 
-SRC = meu\ filo/main.c \
-      meu\ filo/utils.c \
-      meu\ filo/parsing.c \
-      meu\ filo/init.c \
-      meu\ filo/routine.c \
-      meu\ filo/simulation.c \
-      meu\ filo/monitor.c \
-      meu\ filo/cleanup.c
+SRC = main.c \
+      init.c \
+      routine.c \
+      monitor.c \
+      utils.c
 
-OBJ = $(SRC:.c=.o)
+OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-%.o: %.c
+$(OBJ_DIR)/%.o: %.c philo.h | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
 clean:
-	$(RM) $(OBJ)
+	$(RM) -r $(OBJ_DIR)
 
 fclean: clean
 	$(RM) $(NAME)
