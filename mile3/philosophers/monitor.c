@@ -3,37 +3,49 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppaula-s <ppaula-s@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 23:14:35 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/11/10 12:33:11 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/11/18 15:51:24 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+static void	announce_death(t_data *data, int philo_id, long death_time)
+{
+	pthread_mutex_lock(&data->print_mutex);
+	printf("%ld %d died\n", death_time - data->start_time, philo_id);
+	pthread_mutex_unlock(&data->print_mutex);
+	pthread_mutex_lock(&data->end_mutex);
+	data->simulation_end = true;
+	pthread_mutex_unlock(&data->end_mutex);
+}
+
+static bool	is_philosopher_dead(t_data *data, int i, long current_time)
+{
+	long	last_meal;
+	bool	is_dead;
+
+	pthread_mutex_lock(&data->meal_mutex);
+	last_meal = data->philos[i].last_meal_time;
+	is_dead = (current_time - last_meal > data->time_to_die);
+	pthread_mutex_unlock(&data->meal_mutex);
+	return (is_dead);
+}
+
 bool	check_death(t_data *data)
 {
 	int		i;
 	long	current_time;
-	long	last_meal;
 
 	i = 0;
 	while (i < data->philo_nbr)
 	{
 		current_time = get_time();
-		pthread_mutex_lock(&data->meal_mutex);
-		last_meal = data->philos[i].last_meal_time;
-		pthread_mutex_unlock(&data->meal_mutex);
-		if (current_time - last_meal > data->time_to_die)
+		if (is_philosopher_dead(data, i, current_time))
 		{
-			pthread_mutex_lock(&data->print_mutex);
-			printf("%ld %d died\n", current_time - data->start_time,
-				data->philos[i].id);
-			pthread_mutex_unlock(&data->print_mutex);
-			pthread_mutex_lock(&data->end_mutex);
-			data->simulation_end = true;
-			pthread_mutex_unlock(&data->end_mutex);
+			announce_death(data, data->philos[i].id, current_time);
 			return (true);
 		}
 		i++;
@@ -63,7 +75,6 @@ bool	check_all_ate(t_data *data)
 		pthread_mutex_lock(&data->end_mutex);
 		data->simulation_end = true;
 		pthread_mutex_unlock(&data->end_mutex);
-
 		return (true);
 	}
 	return (false);
@@ -82,29 +93,6 @@ void	*monitor_routine(void *arg)
 	}
 	return (NULL);
 }
-
-void	start_simulation(t_data *data)
-{
-	int			i;
-	pthread_t	monitor_thread;
-
-	i = 0;
-	while (i < data->philo_nbr)
-	{
-		pthread_create(&data->philos[i].thread, NULL,
-			philosopher_routine, &data->philos[i]);
-		i++;
-	}
-	pthread_create(&monitor_thread, NULL, monitor_routine, data);
-	pthread_join(monitor_thread, NULL);
-	i = 0;
-	while (i < data->philo_nbr)
-	{
-		pthread_join(data->philos[i].thread, NULL);
-		i++;
-	}
-}
-
 
 /* toctou
 	printf guarrada

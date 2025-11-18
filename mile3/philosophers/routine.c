@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: silvertape <silvertape@student.42.fr>      +#+  +:+       +#+        */
+/*   By: ppaula-s <ppaula-s@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 23:14:28 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/10/26 16:05:42 by silvertape       ###   ########.fr       */
+/*   Updated: 2025/11/18 15:19:53 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,16 @@ void	take_forks(t_philo *philo)
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->right_fork);
-		print_status(philo, "has taken the right fork");
+		print_status(philo, "has taken a fork");
 		pthread_mutex_lock(philo->left_fork);
-		print_status(philo, "has taken the left fork");
+		print_status(philo, "has taken a fork");
 	}
 	else
 	{
 		pthread_mutex_lock(philo->left_fork);
-		print_status(philo, "has taken the left fork");
+		print_status(philo, "has taken a fork");
 		pthread_mutex_lock(philo->right_fork);
-		print_status(philo, "has taken the right fork");
+		print_status(philo, "has taken a fork");
 	}
 }
 

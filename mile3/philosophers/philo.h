@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaula-s <ppaula-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppaula-s <ppaula-s@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 23:34:11 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/10/22 23:34:12 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/11/18 11:23:24 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <limits.h>
 
 typedef struct s_data	t_data;
 
