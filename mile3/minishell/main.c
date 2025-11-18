@@ -31,12 +31,19 @@
 ** - Perform any necessary cleanup before exiting using exit.
 */
 
-void parseinput(char *input)
+char *parseinput(char *input, char **envp)
 {
-	char **argv = ft_split(input, ' ');
-	if (!argv)
-		return ;
-	if (ft_strncmp(argv[0], "exit", 4) == 0)
+	char **argv;
+	char *cmd_path;
+
+	argv = split_with_quotes(input);
+	if (!argv || !argv[0])
+	{
+		if (argv)
+			free_split(argv);
+		return (input);
+	}
+	if (ft_strncmp(argv[0], "exit", 5) == 0)
 	{
 		rl_clear_history();
 		free_split(argv);
@@ -44,26 +51,40 @@ void parseinput(char *input)
 			exit(0);
 		exit(ft_atoi(argv[1]));
 	}
+	cmd_path = find_command_path(argv[0], envp);
+	if (cmd_path)
+	{
+		free(cmd_path);
+		execute_command(argv, envp);
+		free_split(argv);
+		return (NULL);
+	}
 	free_split(argv);
+	return (input);
 }
 
-int main(void)
+int main(int argc, char **argv, char **envp)
 {
 	char *string;
 	char *prompt;
 	char cwd[1024];
+	char *result;
 
+	(void)argc;
+	(void)argv;
 	string = NULL;
+	setupsignals();
+
 	while (1)
 	{
 		if (getcwd(cwd, sizeof(cwd)) != NULL)
 		{
 			prompt = ft_strjoin(cwd, "$ ");
 			if (!prompt)
-				prompt = ft_strdup("minishell$ ");
+				prompt = ft_strdup("minishell ");
 		}
 		else
-			prompt = ft_strdup("minishell$ ");
+			prompt = ft_strdup("minishell ");
 		string = readline(prompt);
 		free(prompt);
 		if (!string)
@@ -71,7 +92,12 @@ int main(void)
 			rl_clear_history();
 			return (0);
 		}
-		parseinput(string);
+		result = parseinput(string, envp);
+		if (result)
+		{
+			write(1, result, ft_strlen(result));
+			write(1, "\n", 1);
+		}
 		add_history(string);
 		free(string);
 	}

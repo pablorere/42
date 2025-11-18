@@ -22,7 +22,7 @@ LIBFT		= $(LIBFT_DIR)/libft.a
 OBJ_DIR		= obj
 SRCS_DIR	= srcs
 
-SRCS		= main.c \
+SRCS		= main.c srcs/signals.c \
 			  srcs/utils.c \
 			  srcs/builtins.c
 OBJS		= $(addprefix $(OBJ_DIR)/, $(notdir $(SRCS:.c=.o)))
