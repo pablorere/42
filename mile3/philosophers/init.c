@@ -6,7 +6,7 @@
 /*   By: ppaula-s <ppaula-s@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 11:21:27 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/11/18 13:03:46 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/11/18 15:50:58 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	parse_arguments(t_data *data, char **av)
 	if (av[5])
 	{
 		data->limit_meals = ft_atoi(av[5]);
-			if (data->limit_meals == 0)
-				ft_error("Error: nbr_meals must be a number and atleast 1");
+		if (data->limit_meals == 0)
+			ft_error("Error: nbr_meals must be a number and atleast 1");
 	}
 	else
 		data->limit_meals = -1;
@@ -30,7 +30,7 @@ void	parse_arguments(t_data *data, char **av)
 		ft_error("Error: philo number must be at least 1");
 	if (data->time_to_die < 60 || data->time_to_eat < 60
 		|| data->time_to_sleep < 60)
-		ft_error("Error: Times must be a number and atleast 60 ms\n");
+		ft_error("Error: Times must be an int bigger than 59ms \n");
 }
 
 void	init_forks(t_data *data)
