@@ -6,7 +6,7 @@
 /*   By: ppaula-s <ppaula-s@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 15:37:29 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/12/20 18:48:07 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/12/20 18:55:00 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,17 @@ void	ft_usleep(long ms, t_data *data)
 
 void	print_status(t_philo *philo, char *status)
 {
+	long	timestamp;
+
+	pthread_mutex_lock(&philo->data->print_mutex);
 	pthread_mutex_lock(&philo->data->end_mutex);
 	if (!philo->data->simulation_end)
 	{
-		pthread_mutex_lock(&philo->data->print_mutex);
-		if (!philo->data->simulation_end)
-			printf("%ld %d %s\n", get_time() - philo->data->start_time,
-				philo->id, status);
-		pthread_mutex_unlock(&philo->data->print_mutex);
+		timestamp = get_time() - philo->data->start_time;
+		printf("%ld %d %s\n", timestamp, philo->id, status);
 	}
 	pthread_mutex_unlock(&philo->data->end_mutex);
+	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
 void	ft_error(char *msg)
