@@ -1,8 +1,10 @@
 NAME = philo
+SRC_DIR = src
 OBJ_DIR = obj
+INC_DIR = include
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -pthread
+CFLAGS = -Wall -Wextra -Werror -pthread -I$(INC_DIR)
 RM = rm -f
 
 SRC = main.c \
@@ -11,6 +13,7 @@ SRC = main.c \
       monitor.c \
       utils.c
 
+SRCS = $(addprefix $(SRC_DIR)/, $(SRC))
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
 all: $(NAME)
@@ -18,7 +21,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-$(OBJ_DIR)/%.o: %.c philo.h | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DIR)/philo.h | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR):

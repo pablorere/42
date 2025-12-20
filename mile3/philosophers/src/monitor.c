@@ -6,7 +6,7 @@
 /*   By: ppaula-s <ppaula-s@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 23:14:35 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/11/18 15:51:24 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/12/20 18:46:01 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static bool	is_philosopher_dead(t_data *data, int i, long current_time)
 
 	pthread_mutex_lock(&data->meal_mutex);
 	last_meal = data->philos[i].last_meal_time;
-	is_dead = (current_time - last_meal > data->time_to_die);
+	is_dead = (current_time - last_meal >= data->time_to_die);
 	pthread_mutex_unlock(&data->meal_mutex);
 	return (is_dead);
 }
@@ -89,7 +89,7 @@ void	*monitor_routine(void *arg)
 	{
 		if (check_death(data) || check_all_ate(data))
 			break ;
-		usleep(1000);
+		usleep(500);
 	}
 	return (NULL);
 }

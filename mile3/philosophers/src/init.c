@@ -6,7 +6,7 @@
 /*   By: ppaula-s <ppaula-s@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 11:21:27 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/11/18 15:50:58 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/12/20 18:44:55 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,14 @@ void	parse_arguments(t_data *data, char **av)
 	data->time_to_die = ft_atoi(av[2]);
 	data->time_to_eat = ft_atoi(av[3]);
 	data->time_to_sleep = ft_atoi(av[4]);
+	if (data->philo_nbr <= 0 || data->time_to_die <= 0
+		|| data->time_to_eat <= 0 || data->time_to_sleep <= 0)
+		ft_error("Error: Invalid arguments (overflow or negative values)");
 	if (av[5])
 	{
 		data->limit_meals = ft_atoi(av[5]);
-		if (data->limit_meals == 0)
-			ft_error("Error: nbr_meals must be a number and atleast 1");
+		if (data->limit_meals <= 0)
+			ft_error("Error: nbr_meals must be a positive number");
 	}
 	else
 		data->limit_meals = -1;

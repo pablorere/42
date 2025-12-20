@@ -6,7 +6,7 @@
 /*   By: ppaula-s <ppaula-s@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 15:37:29 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/11/18 15:43:28 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2025/12/20 18:48:07 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	ft_usleep(long ms, t_data *data)
 	{
 		if (check_simulation_end(data))
 			break ;
-		usleep(50);
+		usleep(100);
 	}
 }
 
@@ -55,8 +55,8 @@ void	ft_error(char *msg)
 
 int	ft_atoi(const char *str)
 {
-	int	res;
-	int	sign;
+	long	res;
+	int		sign;
 
 	res = 0;
 	sign = 1;
@@ -65,18 +65,18 @@ int	ft_atoi(const char *str)
 	if (*str == '-' || *str == '+')
 	{
 		if (*str == '-')
-			return (0);
+			return (-1);
 		str++;
 	}
 	if (*str < '0' || *str > '9')
-		return (0);
+		return (-1);
 	while (*str >= '0' && *str <= '9')
 	{
-		if (res > INT_MAX / 10)
-			return (0);
 		res = res * 10 + (*str++ - '0');
+		if (res > INT_MAX)
+			return (-1);
 	}
 	if (*str != '\0')
-		return (0);
-	return (res * sign);
+		return (-1);
+	return ((int)(res * sign));
 }
