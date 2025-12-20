@@ -37,14 +37,10 @@ void	print_status(t_philo *philo, char *status)
 {
 	long	timestamp;
 
+	timestamp = get_time() - philo->data->start_time;
 	pthread_mutex_lock(&philo->data->print_mutex);
-	pthread_mutex_lock(&philo->data->end_mutex);
-	if (!philo->data->simulation_end)
-	{
-		timestamp = get_time() - philo->data->start_time;
+	if (!check_simulation_end(philo->data))
 		printf("%ld %d %s\n", timestamp, philo->id, status);
-	}
-	pthread_mutex_unlock(&philo->data->end_mutex);
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
