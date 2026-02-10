@@ -98,11 +98,11 @@ void execute_command(char **argv, char **envp)
 	}
 }
 
-static int	count_args(char *str)
+static int count_args(char *str)
 {
-	int	count;
-	int	in_quotes;
-	int	i;
+	int count;
+	int in_quotes;
+	int i;
 
 	count = 0;
 	in_quotes = 0;
@@ -125,12 +125,12 @@ static int	count_args(char *str)
 	return (count);
 }
 
-static char	*extract_arg(char *str, int *pos)
+static char *extract_arg(char *str, int *pos)
 {
-	int		start;
-	int		len;
-	int		in_quotes;
-	char	*result;
+	int start;
+	int len;
+	int in_quotes;
+	char *result;
 
 	in_quotes = 0;
 	while (str[*pos] == ' ')
@@ -167,12 +167,12 @@ static char	*extract_arg(char *str, int *pos)
 	return (result);
 }
 
-char	**split_with_quotes(char *str)
+char **split_with_quotes(char *str)
 {
-	char	**result;
-	int		count;
-	int		i;
-	int		pos;
+	char **result;
+	int count;
+	int i;
+	int pos;
 
 	if (!str)
 		return (NULL);

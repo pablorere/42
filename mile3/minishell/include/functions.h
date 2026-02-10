@@ -35,12 +35,12 @@
 #include <term.h>
 
 // Function prototypes
-void	free_split(char **split);
-void	setupsignals(void);
-char	*search_env(char **env, char *key);
-char	*find_command_path(char *command, char **envp);
-void	execute_command(char **argv, char **envp);
-char	**split_with_quotes(char *str);
+void free_split(char **split);
+void setupsignals(void);
+char *search_env(char **env, char *key);
+char *find_command_path(char *command, char **envp);
+void execute_command(char **argv, char **envp);
+char **split_with_quotes(char *str);
 /*
 	make file needs :
 	-lreadline
