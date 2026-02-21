@@ -93,7 +93,3 @@ void	*monitor_routine(void *arg)
 	}
 	return (NULL);
 }
-
-/* toctou
-	printf guarrada
-	*/
