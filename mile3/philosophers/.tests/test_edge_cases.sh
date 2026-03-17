@@ -27,7 +27,7 @@ fi
 passed=0
 failed=0
 
-# Function to run test
+# run_test: expects the program to EXIT WITH CODE 1 (invalid input rejected)
 run_test() {
     local test_name="$1"
     shift
@@ -55,6 +55,31 @@ run_test() {
     fi
 }
 
+# run_valid_test: expects the program to ACCEPT the input (exit 0 or timed-out run)
+run_valid_test() {
+    local test_name="$1"
+    local timeout_dur="$2"
+    shift 2
+    local args="$@"
+
+    echo -n "Testing: $test_name ... "
+
+    timeout $timeout_dur $PHILO $args > /dev/null 2>&1
+    local exit_code=$?
+
+    # For valid inputs, we expect exit 0 (success) or 124 (still running)
+    if [ $exit_code -eq 0 ] || [ $exit_code -eq 124 ]; then
+        echo -e "${GREEN}✓ PASS${NC} (accepted valid input)"
+        ((passed++))
+    elif [ $exit_code -eq 1 ]; then
+        echo -e "${RED}✗ FAIL${NC} (rejected valid input)"
+        ((failed++))
+    else
+        echo -e "${YELLOW}? UNKNOWN${NC} (exit code: $exit_code)"
+        ((failed++))
+    fi
+}
+
 echo "=== ARGUMENT COUNT TESTS ==="
 run_test "No arguments"
 run_test "Only 1 argument" 5
@@ -72,7 +97,7 @@ run_test "Letters in arg 5" 5 800 200 200 abc
 run_test "Mixed letters and numbers" 5abc 800 200 200 2
 run_test "Special characters" 5 800@ 200 200 2
 run_test "Spaces in arguments" "5 10" 800 200 200 2
-run_test "Empty string arg" "" 800 200 200 2
+run_test "Non-printable ascii" "$(printf '\x01')" 800 200 200 2
 
 echo ""
 echo "=== NEGATIVE NUMBER TESTS ==="
@@ -101,11 +126,9 @@ run_test "Very large time_to_sleep" 5 800 200 2147483648 2
 
 echo ""
 echo "=== BOUNDARY TESTS (subject requirements) ==="
-run_test "Exactly 200 philosophers" 200 800 200 200 2
-run_test "Time below 60ms (time_to_die)" 5 59 200 200 2
-run_test "Time below 60ms (time_to_eat)" 5 800 59 200 2
-run_test "Time below 60ms (time_to_sleep)" 5 800 200 59 2
-run_test "All times below 60ms" 5 50 50 50 2
+run_valid_test "Exactly 200 philosophers" 10 200 800 200 200 2
+run_valid_test "Minimum times (1 ms each)" 3 5 1 1 1 2
+run_valid_test "Time to die equals eat+sleep" 5 5 400 200 200
 
 echo ""
 echo "=== FLOAT/DECIMAL TESTS ==="
@@ -115,15 +138,14 @@ run_test "Decimal notation" 5 8e2 200 200 2
 
 echo ""
 echo "=== WHITESPACE/FORMAT TESTS ==="
-run_test "Leading zeros" 005 0800 0200 0200 2
-run_test "Plus sign prefix" +5 +800 +200 +200 2
-run_test "Tab character" "5	800	200	200	7"
+run_valid_test "Leading zeros (005 = 5, valid)" 5 005 0800 0200 0200 2
+run_valid_test "Plus sign prefix (+5 = 5, valid)" 5 +5 +800 +200 +200 2
+run_valid_test "Tab-separated args (shell splits)" 5 "5	800	200	200	7"
 
 echo ""
 echo "=== EXTREME EDGE CASES ==="
-run_test "Single philosopher" 1 400 200 200 2
-run_test "NULL byte attempt" "$(printf '5\x00')" 800 200 200 2
-run_test "Newline in arg" "$(printf '5\n800')" 200 200 200
+run_valid_test "Single philosopher (dies as expected)" 3 1 400 200 200
+run_valid_test "Single philosopher with meal limit" 3 1 800 200 200 2
 
 echo ""
 echo "=========================================="

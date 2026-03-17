@@ -18,8 +18,8 @@ int	main(int ac, char **av)
 
 	if (ac != 5 && ac != 6)
 	{
-		ft_error("Error: Invalid arguments\nUsage: \
-			./philo 5 800 200 200 [5]\n");
+		ft_error("Error: Invalid arguments\n"
+			"Usage: ./philo N ttdie tteat ttsleep [n_meals]\n");
 		return (1);
 	}
 	parse_arguments(&data, av);

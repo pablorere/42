@@ -10,15 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#ifndef PHILO_H
+# define PHILO_H
 
-#include <unistd.h>
-#include <pthread.h>
-#include <sys/time.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <limits.h>
+# include <unistd.h>
+# include <pthread.h>
+# include <sys/time.h>
+# include <stdlib.h>
+# include <stdbool.h>
+# include <limits.h>
 
 typedef struct s_data	t_data;
 
@@ -70,3 +70,5 @@ void	ft_usleep(long ms, t_data *data);
 void	print_status(t_philo *philo, char *status);
 int		ft_atoi(const char *str);
 void	ft_error(char *msg);
+
+#endif
