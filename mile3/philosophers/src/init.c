@@ -20,20 +20,15 @@ void	parse_arguments(t_data *data, char **av)
 	data->time_to_sleep = ft_atoi(av[4]);
 	if (data->philo_nbr <= 0 || data->time_to_die <= 0
 		|| data->time_to_eat <= 0 || data->time_to_sleep <= 0)
-		ft_error("Error: Invalid arguments (overflow or negative values)");
+		ft_error("Error: All arguments must be positive integers\n");
 	if (av[5])
 	{
 		data->limit_meals = ft_atoi(av[5]);
 		if (data->limit_meals <= 0)
-			ft_error("Error: nbr_meals must be a positive number");
+			ft_error("Error: nbr_meals must be a positive integer\n");
 	}
 	else
 		data->limit_meals = -1;
-	if (data->philo_nbr == 0)
-		ft_error("Error: philo number must be at least 1");
-	if (data->time_to_die < 60 || data->time_to_eat < 60
-		|| data->time_to_sleep < 60)
-		ft_error("Error: Times must be an int bigger than 59ms \n");
 }
 
 void	init_forks(t_data *data)

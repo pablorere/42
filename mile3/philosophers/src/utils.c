@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <stdio.h>
 
 long	get_time(void)
 {
@@ -50,25 +51,26 @@ void	print_status(t_philo *philo, char *status)
 
 void	ft_error(char *msg)
 {
-	printf("%s", msg);
+	int	len;
+
+	len = 0;
+	while (msg[len])
+		len++;
+	write(2, msg, len);
 	exit(1);
 }
 
 int	ft_atoi(const char *str)
 {
 	long	res;
-	int		sign;
 
 	res = 0;
-	sign = 1;
 	while (*str == ' ' || (*str >= 9 && *str <= 13))
 		str++;
-	if (*str == '-' || *str == '+')
-	{
-		if (*str == '-')
-			return (-1);
+	if (*str == '-')
+		return (-1);
+	if (*str == '+')
 		str++;
-	}
 	if (*str < '0' || *str > '9')
 		return (-1);
 	while (*str >= '0' && *str <= '9')
@@ -79,5 +81,6 @@ int	ft_atoi(const char *str)
 	}
 	if (*str != '\0')
 		return (-1);
-	return ((int)(res * sign));
+	return ((int)res);
 }
+

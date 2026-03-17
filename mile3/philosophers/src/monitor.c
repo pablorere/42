@@ -11,23 +11,30 @@
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <stdio.h>
 
-static void	announce_death(t_data *data, int philo_id, long death_time)
+static void	announce_death(t_data *data, int philo_id)
 {
 	pthread_mutex_lock(&data->print_mutex);
-	printf("%ld %d died\n", death_time - data->start_time, philo_id);
-	pthread_mutex_unlock(&data->print_mutex);
 	pthread_mutex_lock(&data->end_mutex);
-	data->simulation_end = true;
+	if (!data->simulation_end)
+	{
+		printf("%ld %d died\n",
+			get_time() - data->start_time, philo_id);
+		data->simulation_end = true;
+	}
 	pthread_mutex_unlock(&data->end_mutex);
+	pthread_mutex_unlock(&data->print_mutex);
 }
 
-static bool	is_philosopher_dead(t_data *data, int i, long current_time)
+static bool	is_philosopher_dead(t_data *data, int i)
 {
 	long	last_meal;
+	long	current_time;
 	bool	is_dead;
 
 	pthread_mutex_lock(&data->meal_mutex);
+	current_time = get_time();
 	last_meal = data->philos[i].last_meal_time;
 	is_dead = (current_time - last_meal >= data->time_to_die);
 	pthread_mutex_unlock(&data->meal_mutex);
@@ -36,16 +43,14 @@ static bool	is_philosopher_dead(t_data *data, int i, long current_time)
 
 bool	check_death(t_data *data)
 {
-	int		i;
-	long	current_time;
+	int	i;
 
 	i = 0;
 	while (i < data->philo_nbr)
 	{
-		current_time = get_time();
-		if (is_philosopher_dead(data, i, current_time))
+		if (is_philosopher_dead(data, i))
 		{
-			announce_death(data, data->philos[i].id, current_time);
+			announce_death(data, data->philos[i].id);
 			return (true);
 		}
 		i++;
@@ -93,7 +98,3 @@ void	*monitor_routine(void *arg)
 	}
 	return (NULL);
 }
-
-/* toctou
-	printf guarrada
-	*/

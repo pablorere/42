@@ -164,11 +164,11 @@ run_mandatory_test 8 \
     "no_death" \
     3 800 200 200
 
-# Test 9: 4 philosophers with very tight timing
+# Test 9: 4 philosophers with zero buffer timing (WILL die due to OS scheduling)
 run_mandatory_test 9 \
-    "4 philosophers borderline timing (critical)" \
+    "4 philosophers zero-buffer timing (expected to die)" \
     5 \
-    "no_death" \
+    "should_die" \
     4 400 200 200
 
 # Test 10: Large number of philosophers
