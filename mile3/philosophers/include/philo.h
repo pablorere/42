@@ -19,6 +19,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <limits.h>
+#include <stdint.h>
+#include <stddef.h>
 
 typedef struct s_data	t_data;
 
@@ -49,24 +51,25 @@ typedef struct s_data
 	t_philo			*philos;
 }	t_data;
 
-void	parse_arguments(t_data *data, char **av);
-void	init_forks(t_data *data);
-void	init_philosophers(t_data *data);
-void	init_simulation(t_data *data);
-void	cleanup_simulation(t_data *data);
-void	start_simulation(t_data *data);
-bool	check_death(t_data *data);
-bool	check_all_ate(t_data *data);
-bool	check_simulation_end(t_data *data);
-void	*monitor_routine(void *arg);
-void	take_forks(t_philo *philo);
-void	drop_forks(t_philo *philo);
-void	philo_eat(t_philo *philo);
-void	philo_sleep(t_philo *philo);
-void	philo_think(t_philo *philo);
-void	*philosopher_routine(void *arg);
-long	get_time(void);
-void	ft_usleep(long ms, t_data *data);
-void	print_status(t_philo *philo, char *status);
-int		ft_atoi(const char *str);
-void	ft_error(char *msg);
+void		parse_arguments(t_data *data, char **av);
+void		init_forks(t_data *data);
+void		init_philosophers(t_data *data);
+void		init_simulation(t_data *data);
+void		cleanup_simulation(t_data *data);
+void		start_simulation(t_data *data);
+bool		check_death(t_data *data);
+bool		check_all_ate(t_data *data);
+bool		check_simulation_end(t_data *data);
+void		*monitor_routine(void *arg);
+void		take_forks(t_philo *philo);
+void		drop_forks(t_philo *philo);
+void		philo_eat(t_philo *philo);
+void		philo_sleep(t_philo *philo);
+void		philo_think(t_philo *philo);
+void		*philosopher_routine(void *arg);
+uint64_t	get_time(void);
+void		ft_usleep(long ms, t_data *data);
+void		print_status(t_philo *philo, char *status);
+int			ft_atoi(const char *str);
+void		ft_error(char *msg);
+

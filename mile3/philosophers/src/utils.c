@@ -12,24 +12,32 @@
 
 #include "philo.h"
 
-long	get_time(void)
+uint64_t get_time(void)
 {
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+    struct timeval tv;
+    
+    // Check if it actually succeeded
+    if (gettimeofday(&tv, NULL) == 0) {
+        // Cast to uint64_t BEFORE multiplying to prevent overflow
+        return ((uint64_t)tv.tv_sec * 1000) + ((uint64_t)tv.tv_usec / 1000);
+    }
+    
+    // Return 0 or handle the error appropriately for your app
+    return (0); 
 }
 
-void	ft_usleep(long ms, t_data *data)
+void	ft_usleep(long unsigned ms, t_data *data)
 {
-	long	start;
+	long unsigned	start;
 
 	start = get_time();
+	if (start == 0)
+		end_simulation(&data);
 	while (get_time() - start < ms)
 	{
 		if (check_simulation_end(data))
 			break ;
-		usleep(100);
+		usleep(50);
 	}
 }
 

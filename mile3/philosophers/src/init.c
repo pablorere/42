@@ -46,7 +46,8 @@ void	init_forks(t_data *data)
 	i = 0;
 	while (i < data->philo_nbr)
 	{
-		pthread_mutex_init(&data->forks[i], NULL);
+		if (pthread_mutex_init(&data->forks[i], NULL))
+			ft_error("Error: Failed fork allocation\n");
 		i++;
 	}
 }
