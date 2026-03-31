@@ -6,11 +6,12 @@
 /*   By: ppaula-s <ppaula-s@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 00:00:00 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/11/18 16:23:58 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2026/03/31 21:37:19 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <stdio.h>
 
 int	main(int ac, char **av)
 {
@@ -22,11 +23,42 @@ int	main(int ac, char **av)
 			"Usage: ./philo N ttdie tteat ttsleep [n_meals]\n");
 		return (1);
 	}
-	parse_arguments(&data, av);
-	init_simulation(&data);
-	start_simulation(&data);
+	parse_args(&data, av);
+	if (!init_simulation(&data))
+	{
+		fprintf(stderr, "Error: Failed to initialize simulation\n");
+		return (1);
+	}
+	if (!start_simulation(&data))
+	{
+		fprintf(stderr, "Error: Failed to start simulation\n");
+		cleanup_simulation(&data);
+		return (1);
+	}
 	cleanup_simulation(&data);
 	return (0);
+}
+
+static void	philo_wait_for_start(t_philo *philo)
+{
+	while (true)
+	{
+		pthread_mutex_lock(&philo->data->end_mutex);
+		if (philo->data->start_time != 0)
+		{
+			pthread_mutex_unlock(&philo->data->end_mutex);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->data->end_mutex);
+		usleep(100);
+	}
+}
+
+static void	philo_one_routine(t_philo *philo)
+{
+	print_status(philo, "has taken a fork");
+	while (!check_simulation_end(philo->data))
+		usleep(1000);
 }
 
 void	*philosopher_routine(void *arg)
@@ -34,19 +66,18 @@ void	*philosopher_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	philo_wait_for_start(philo);
 	if (philo->data->philo_nbr == 1)
 	{
-		print_status(philo, "has taken a fork");
-		while (!check_simulation_end(philo->data))
-			usleep(1000);
+		philo_one_routine(philo);
 		return (NULL);
 	}
 	if (philo->id % 2 == 0)
-		ft_usleep(1, philo->data);
+		usleep(1000);
 	while (!check_simulation_end(philo->data))
 	{
-		philo_think(philo);
 		philo_eat(philo);
+		philo_think(philo);
 		philo_sleep(philo);
 	}
 	return (NULL);
@@ -60,26 +91,4 @@ bool	check_simulation_end(t_data *data)
 	end = data->simulation_end;
 	pthread_mutex_unlock(&data->end_mutex);
 	return (end);
-}
-
-void	start_simulation(t_data *data)
-{
-	int			i;
-	pthread_t	monitor_thread;
-
-	i = 0;
-	while (i < data->philo_nbr)
-	{
-		pthread_create(&data->philos[i].thread, NULL,
-			philosopher_routine, &data->philos[i]);
-		i++;
-	}
-	pthread_create(&monitor_thread, NULL, monitor_routine, data);
-	pthread_join(monitor_thread, NULL);
-	i = 0;
-	while (i < data->philo_nbr)
-	{
-		pthread_join(data->philos[i].thread, NULL);
-		i++;
-	}
 }

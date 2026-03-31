@@ -70,32 +70,63 @@ char *find_command_path(char *command, char **envp)
 	free_split(paths);
 	return (NULL);
 }
+int is_builtin(char *command)
+{
+    size_t len;
 
+    if (!command)
+        return (0);
+    len = ft_strlen(command) + 1; 
+    if (ft_strncmp(command, "echo", len) == 0)
+        return (1);
+    if (ft_strncmp(command, "cd", len) == 0)
+        return (2);
+    if (ft_strncmp(command, "pwd", len) == 0)
+        return (3);
+    if (ft_strncmp(command, "export", len) == 0)
+        return (4);
+    if (ft_strncmp(command, "unset", len) == 0)
+        return (5);
+    if (ft_strncmp(command, "env", len) == 0)
+        return (6);
+    if (ft_strncmp(command, "exit", len) == 0)
+        return (7);
+    return (0); // Not a built-in
+}
+int exec_builtin(int command, char *arg)
+{
+	
+}
 void execute_command(char **argv, char **envp)
 {
 	char *cmd_path;
 	pid_t pid;
 	int status;
+	int builtin_id;
 
-	cmd_path = find_command_path(argv[0], envp);
-	if (!cmd_path)
-		return;
-	pid = fork();
-	if (pid == -1)
-	{
-		free(cmd_path);
-		return;
-	}
-	if (pid == 0)
-	{
-		execve(cmd_path, argv, envp);
-		exit(1);
-	}
-	else
-	{
-		waitpid(pid, &status, 0);
-		free(cmd_path);
-	}
+	builtin_id = is_builtin(command);
+	if (builtin_id)
+		return (exec_builtin(builtin_id));
+	else 
+		cmd_path = find_command_path(argv[0], envp);
+		if (!cmd_path)
+			return;
+		pid = fork();
+		if (pid == -1)
+		{
+			free(cmd_path);
+			return;
+		}
+		if (pid == 0)
+		{
+			execve(cmd_path, argv, envp);
+			exit(1);
+		}
+		else
+		{
+			waitpid(pid, &status, 0);
+			free(cmd_path);
+		}
 }
 
 static int count_args(char *str)

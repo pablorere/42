@@ -6,53 +6,42 @@
 /*   By: ppaula-s <ppaula-s@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 11:21:27 by ppaula-s          #+#    #+#             */
-/*   Updated: 2025/12/20 18:44:55 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2026/03/31 21:37:20 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	parse_arguments(t_data *data, char **av)
-{
-	data->philo_nbr = ft_atoi(av[1]);
-	data->time_to_die = ft_atoi(av[2]);
-	data->time_to_eat = ft_atoi(av[3]);
-	data->time_to_sleep = ft_atoi(av[4]);
-	if (data->philo_nbr <= 0 || data->time_to_die <= 0
-		|| data->time_to_eat <= 0 || data->time_to_sleep <= 0)
-		ft_error("Error: All arguments must be positive integers\n");
-	if (av[5])
-	{
-		data->limit_meals = ft_atoi(av[5]);
-		if (data->limit_meals <= 0)
-			ft_error("Error: nbr_meals must be a positive integer\n");
-	}
-	else
-		data->limit_meals = -1;
-}
-
-void	init_forks(t_data *data)
+int	init_forks(t_data *data)
 {
 	int	i;
 
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->philo_nbr);
 	if (!data->forks)
-		ft_error("Error: Memory allocation failed\n");
+		return (0);
 	i = 0;
 	while (i < data->philo_nbr)
 	{
-		pthread_mutex_init(&data->forks[i], NULL);
+		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
+		{
+			while (--i >= 0)
+				pthread_mutex_destroy(&data->forks[i]);
+			free(data->forks);
+			data->forks = NULL;
+			return (0);
+		}
 		i++;
 	}
+	return (1);
 }
 
-void	init_philosophers(t_data *data)
+int	init_philosophers(t_data *data)
 {
 	int	i;
 
 	data->philos = malloc(sizeof(t_philo) * data->philo_nbr);
 	if (!data->philos)
-		ft_error("Error: Memory allocation failed\n");
+		return (0);
 	i = 0;
 	while (i < data->philo_nbr)
 	{
@@ -64,32 +53,68 @@ void	init_philosophers(t_data *data)
 		data->philos[i].data = data;
 		i++;
 	}
+	return (1);
 }
 
-void	init_simulation(t_data *data)
+static void	cleanup_init_on_error(t_data *data, int philo_init_failed)
+{
+	int	i;
+
+	if (philo_init_failed)
+	{
+		i = 0;
+		while (i < data->philo_nbr)
+			pthread_mutex_destroy(&data->forks[i++]);
+		free(data->forks);
+		free(data->philos);
+	}
+	pthread_mutex_destroy(&data->print_mutex);
+	pthread_mutex_destroy(&data->meal_mutex);
+	pthread_mutex_destroy(&data->end_mutex);
+}
+
+int	init_simulation(t_data *data)
 {
 	data->simulation_end = false;
-	data->start_time = get_time();
-	pthread_mutex_init(&data->print_mutex, NULL);
-	pthread_mutex_init(&data->meal_mutex, NULL);
-	pthread_mutex_init(&data->end_mutex, NULL);
-	init_forks(data);
-	init_philosophers(data);
+	data->start_time = 0;
+	if (!init_mutexes(data))
+		return (0);
+	if (!init_forks(data))
+	{
+		cleanup_init_on_error(data, 0);
+		return (0);
+	}
+	if (!init_philosophers(data))
+	{
+		cleanup_init_on_error(data, 1);
+		return (0);
+	}
+	return (1);
 }
 
 void	cleanup_simulation(t_data *data)
 {
 	int	i;
 
-	i = 0;
-	while (i < data->philo_nbr)
+	if (!data)
+		return ;
+	if (data->forks)
 	{
-		pthread_mutex_destroy(&data->forks[i]);
-		i++;
+		i = 0;
+		while (i < data->philo_nbr)
+		{
+			pthread_mutex_destroy(&data->forks[i]);
+			i++;
+		}
+		free(data->forks);
+		data->forks = NULL;
+	}
+	if (data->philos)
+	{
+		free(data->philos);
+		data->philos = NULL;
 	}
 	pthread_mutex_destroy(&data->print_mutex);
 	pthread_mutex_destroy(&data->meal_mutex);
 	pthread_mutex_destroy(&data->end_mutex);
-	free(data->forks);
-	free(data->philos);
 }
