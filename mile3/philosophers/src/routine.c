@@ -40,13 +40,20 @@ void	drop_forks(t_philo *philo)
 
 void	philo_eat(t_philo *philo)
 {
+	long	start_ts;
+	long	elapsed;
+	long	remaining;
+
 	take_forks(philo);
-	print_status(philo, "is eating");
+	start_ts = print_status(philo, "is eating");
 	pthread_mutex_lock(&philo->data->meal_mutex);
-	philo->last_meal_time = get_time() - philo->data->start_time;
+	philo->last_meal_time = start_ts;
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->data->meal_mutex);
-	ft_usleep(philo->data->time_to_eat, philo->data);
+	elapsed = get_time() - philo->data->start_time - start_ts;
+	remaining = philo->data->time_to_eat - elapsed;
+	if (remaining > 0)
+		ft_usleep(remaining, philo->data);
 	drop_forks(philo);
 }
 

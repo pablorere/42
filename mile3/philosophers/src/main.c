@@ -64,6 +64,7 @@ static void	philo_one_routine(t_philo *philo)
 void	*philosopher_routine(void *arg)
 {
 	t_philo		*philo;
+	long		stagger;
 
 	philo = (t_philo *)arg;
 	philo_wait_for_start(philo);
@@ -72,6 +73,9 @@ void	*philosopher_routine(void *arg)
 		philo_one_routine(philo);
 		return (NULL);
 	}
+	stagger = philo->data->time_to_eat / 2;
+	if (stagger > 0 && philo->id % 2 == 0)
+		usleep(stagger * 1000);
 	while (!check_simulation_end(philo->data))
 	{
 		philo_eat(philo);

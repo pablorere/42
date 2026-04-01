@@ -38,11 +38,11 @@ static bool	is_philosopher_dead(t_data *data, int i)
 	pthread_mutex_lock(&data->meal_mutex);
 	last_meal = data->philos[i].last_meal_time;
 	meals = data->philos[i].meals_eaten;
-	if (meals == 0)
-		is_dead = (current_time >= data->time_to_die);
-	else
-		is_dead = (current_time - last_meal >= data->time_to_die);
 	pthread_mutex_unlock(&data->meal_mutex);
+	if (meals == 0)
+		is_dead = (current_time > data->time_to_die);
+	else
+		is_dead = (current_time - last_meal > data->time_to_die);
 	return (is_dead);
 }
 
@@ -99,7 +99,7 @@ void	*monitor_routine(void *arg)
 	{
 		if (check_death(data) || check_all_ate(data))
 			break ;
-		usleep(2000);
+		usleep(1000);
 	}
 	return (NULL);
 }

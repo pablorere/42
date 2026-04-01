@@ -30,28 +30,45 @@ void	ft_usleep(long ms, t_data *data)
 	{
 		if (check_simulation_end(data))
 			break ;
-		usleep(50);
+		usleep(500);
 	}
 }
-
-void	print_status(t_philo *philo, char *status)
-{
-	long	timestamp;
-
-	timestamp = get_time() - philo->data->start_time;
-	pthread_mutex_lock(&philo->data->print_mutex);
-	pthread_mutex_lock(&philo->data->end_mutex);
-	if (philo->data->simulation_end)
+/*
+	long	print_status(t_philo *philo, char *status)
 	{
-		pthread_mutex_unlock(&philo->data->end_mutex);
-		pthread_mutex_unlock(&philo->data->print_mutex);
-		return ;
-	}
-	pthread_mutex_unlock(&philo->data->end_mutex);
-	printf("%ld %d %s\n", timestamp, philo->id, status);
-	pthread_mutex_unlock(&philo->data->print_mutex);
-}
+		long	timestamp;
 
+		timestamp = get_time() - philo->data->start_time;
+		pthread_mutex_lock(&philo->data->print_mutex);
+		pthread_mutex_lock(&philo->data->end_mutex);
+		if (philo->data->simulation_end)
+		{
+			pthread_mutex_unlock(&philo->data->end_mutex);
+			pthread_mutex_unlock(&philo->data->print_mutex);
+			return (1);
+		}
+		pthread_mutex_unlock(&philo->data->end_mutex);
+		printf("%ld %d %s\n", timestamp, philo->id, status);
+		pthread_mutex_unlock(&philo->data->print_mutex);
+		return(timestamp);
+	}
+*/
+
+long print_status(t_philo *philo, char *status)
+{
+    long timestamp;
+
+    pthread_mutex_lock(&philo->data->print_mutex);
+    if (check_simulation_end(philo->data))
+    {
+        pthread_mutex_unlock(&philo->data->print_mutex);
+        return (1);
+    }
+    timestamp = get_time() - philo->data->start_time;
+    printf("%ld %d %s\n", timestamp, philo->id, status);
+    pthread_mutex_unlock(&philo->data->print_mutex);
+    return (timestamp);
+}
 void	ft_error(char *msg)
 {
 	printf("%s", msg);
