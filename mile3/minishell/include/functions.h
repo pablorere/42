@@ -34,6 +34,10 @@
 #include <curses.h>
 #include <term.h>
 
+typedef struct builtins
+{
+	int echo = 
+}
 // Function prototypes
 void free_split(char **split);
 void setupsignals(void);

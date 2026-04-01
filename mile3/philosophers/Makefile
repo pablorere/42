@@ -11,7 +11,11 @@ SRC = main.c \
       init.c \
       routine.c \
       monitor.c \
-      utils.c
+      utils.c \
+      threads.c \
+      helpers.c \
+      parsing.c \
+      threads_helpers.c
 
 SRCS = $(addprefix $(SRC_DIR)/, $(SRC))
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
