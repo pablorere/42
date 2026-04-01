@@ -6,7 +6,7 @@
 /*   By: ppaula-s <ppaula-s@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 00:00:00 by ppaula-s          #+#    #+#             */
-/*   Updated: 2026/03/31 21:37:19 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2026/04/01 05:23:38 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static void	philo_one_routine(t_philo *philo)
 
 void	*philosopher_routine(void *arg)
 {
-	t_philo	*philo;
+	t_philo		*philo;
 
 	philo = (t_philo *)arg;
 	philo_wait_for_start(philo);
@@ -72,8 +72,6 @@ void	*philosopher_routine(void *arg)
 		philo_one_routine(philo);
 		return (NULL);
 	}
-	if (philo->id % 2 == 0)
-		usleep(1000);
 	while (!check_simulation_end(philo->data))
 	{
 		philo_eat(philo);

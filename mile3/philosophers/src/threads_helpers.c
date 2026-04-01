@@ -29,7 +29,7 @@ void	init_meal_times_inline(t_data *data)
 	while (i < data->philo_nbr)
 	{
 		pthread_mutex_lock(&data->meal_mutex);
-		data->philos[i].last_meal_time = 0;
+		data->philos[i].last_meal_time = get_time() - data->start_time;
 		pthread_mutex_unlock(&data->meal_mutex);
 		i++;
 	}

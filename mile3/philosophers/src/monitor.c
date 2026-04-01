@@ -6,7 +6,7 @@
 /*   By: ppaula-s <ppaula-s@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 23:14:35 by ppaula-s          #+#    #+#             */
-/*   Updated: 2026/03/31 21:25:00 by ppaula-s         ###   ########.fr       */
+/*   Updated: 2026/04/01 05:16:10 by ppaula-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,19 @@ static void	announce_death(t_data *data, int philo_id)
 
 static bool	is_philosopher_dead(t_data *data, int i)
 {
-	long	last_meal;
 	long	current_time;
+	long	last_meal;
+	long	meals;
 	bool	is_dead;
 
 	current_time = get_time() - data->start_time;
 	pthread_mutex_lock(&data->meal_mutex);
 	last_meal = data->philos[i].last_meal_time;
-	is_dead = (current_time - last_meal >= data->time_to_die);
+	meals = data->philos[i].meals_eaten;
+	if (meals == 0)
+		is_dead = (current_time >= data->time_to_die);
+	else
+		is_dead = (current_time - last_meal >= data->time_to_die);
 	pthread_mutex_unlock(&data->meal_mutex);
 	return (is_dead);
 }
@@ -94,7 +99,7 @@ void	*monitor_routine(void *arg)
 	{
 		if (check_death(data) || check_all_ate(data))
 			break ;
-		usleep(10000);
+		usleep(2000);
 	}
 	return (NULL);
 }
