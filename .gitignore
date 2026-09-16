@@ -1,0 +1,44 @@
+# Build artifacts
+*.o
+*.a
+*.so
+a.out
+obj/
+objs/
+build/
+
+# 42 project executables
+philo
+minishell
+push_swap
+checker
+checker_bonus
+pipex
+pipex_bonus
+so_long
+Phonebook
+
+# C++ module executables
+megaphone
+animal
+materia
+fixed_test
+Towards_a_more_useful_fixed_point_number_class
+now_were_talking
+ClapTrap00
+ClapTrap01
+ClapTrap02
+DiamondTrap03
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS
+.DS_Store
+
+# Local dependencies (cloned manually, see project README)
+mile02/so_long/lib/mlx/*
+!mile02/so_long/lib/mlx/.gitkeep

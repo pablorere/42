@@ -1,0 +1,3 @@
+[submodule "mile04/cub3d"]
+	path = mile04/cub3d
+	url = https://github.com/Jhonjairo03s/42_cub3d.git
