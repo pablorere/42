@@ -9,7 +9,8 @@ if [ ! -f wp-config.php ]; then
 fi
 
 # 2. Esperar pela MariaDB
-until mysqladmin ping -h mariadb --silent 2>/dev/null; do
+until mysql -h mariadb -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" \
+      -e "SELECT 1" >/dev/null 2>&1; do
     echo "[wordpress] waiting for mariadb..."
     sleep 2
 done

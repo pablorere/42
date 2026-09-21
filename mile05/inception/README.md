@@ -519,6 +519,14 @@ Cada bónus precisa de **justificação**; não basta existir.
 6. **`docker-compose` (v1) vs `docker compose` (v2)** → usa o v2.
 7. **Segredos no Dockerfile** → reprovado.
 8. **`latest`** em qualquer `FROM`/`image` → reprovado.
+9. **`bind-address` ignorado no Debian**: `/etc/mysql/conf.d/` é lido **antes** de
+   `/etc/mysql/mariadb.conf.d/50-server.cnf` (que fixa `127.0.0.1`). Copia o `my.cnf`
+   para `/etc/mysql/mariadb.conf.d/99-inception.cnf` para ganhar.
+10. **`/var/lib/mysql` pré-inicializado na imagem**: o `apt install mariadb-server`
+    deixa o datadir criado no build; num volume novo o *guard* de init salta. Limpa-o
+    no Dockerfile (`rm -rf /var/lib/mysql && install -d -o mysql -g mysql /var/lib/mysql`).
+11. **Datadir antigo/incompatível no host**: se `/home/<login>/data/mariadb` já tiver
+    conteúdo (ex.: de uma tentativa com Alpine), o init também salta. Limpa-o antes de subir.
 
 ---
 
