@@ -3,96 +3,74 @@
 A study guide to every concept this module expects you to master.
 
 The module builds a small "bureaucracy" simulation: bureaucrats sign and execute
-forms, forms can be abstract, and an intern acts as a form factory. Everything is
-held together by **exception handling**, **inheritance**, and **abstract
+forms, some forms are abstract, and an intern acts as a form factory. Everything
+is held together by **exception handling**, **inheritance**, and **abstract
 classes**.
 
-> This is a learning/reference document, not a solution. Per the subject's AI
-> guidance, the goal is to understand the reasoning — write the code yourself.
+This repository also contains a working reference implementation in `ex00`–`ex03`;
+this guide explains *why* every piece is written the way it is.
+
+---
+
+## Quick reference
+
+| Exercise | New classes | Idea |
+| --- | --- | --- |
+| ex00 | `Bureaucrat` | OCF, `const` name, grade in `[1, 150]`, two custom exceptions |
+| ex01 | `Form` | `const` name + grades, `beSigned` / `signForm` |
+| ex02 | `AForm` (abstract) + `ShrubberyCreationForm`, `RobotomyRequestForm`, `PresidentialPardonForm` | polymorphism, Template Method, `execute` |
+| ex03 | `Intern` | factory table; `makeForm` returns an `AForm *` |
+
+**Grade rule:** 1 is the best grade and 150 the worst. "Incrementing" a grade
+makes it better, so the number goes **down**.
+
+**Required output strings**
+
+| Where | Output |
+| --- | --- |
+| `operator<<(Bureaucrat)` | `<name>, bureaucrat grade <grade>.` |
+| `Bureaucrat::signForm` | `<bureaucrat> signed <form>` or `<bureaucrat> couldn't sign <form> because <reason>` |
+| `Bureaucrat::executeForm` | `<bureaucrat> executed <form>` |
+| `Intern::makeForm` | `Intern creates <form>` |
+
+**Build and test any exercise**
+
+```bash
+cd exNN && make re && ./bureaucrat
+```
+
+**Golden rules that are easy to forget:** compile with
+`-Wall -Wextra -Werror -std=c++98`; every class needs the Orthodox Canonical
+Form (exception classes are exempt); no functions in headers; every header needs
+include guards; no `printf` / `malloc` / `free`; no `using namespace` or `friend`;
+no STL containers or `<algorithm>`; every `new` needs a `delete`.
 
 ---
 
 ## Table of contents
 
-1. [Overview and constraints](#1-overview-and-constraints)
-2. [General rules you must respect](#2-general-rules-you-must-respect)
-3. [Core concepts](#3-core-concepts)
-   - [3.1 Classes, const attributes and initializer lists](#31-classes-const-attributes-and-initializer-lists)
-   - [3.2 Orthodox Canonical Form](#32-orthodox-canonical-form)
-   - [3.3 Encapsulation and getters](#33-encapsulation-and-getters)
-   - [3.4 Exception handling](#34-exception-handling)
-   - [3.5 Custom exception classes](#35-custom-exception-classes)
-   - [3.6 Operator overloading and operator<<](#36-operator-overloading-and-operator)
-   - [3.7 Inheritance, virtual and abstract classes](#37-inheritance-virtual-and-abstract-classes)
-   - [3.8 The Template Method pattern](#38-the-template-method-pattern)
-   - [3.9 The Factory pattern and the Intern](#39-the-factory-pattern-and-the-intern)
-   - [3.10 Randomness in C++98](#310-randomness-in-c98)
-   - [3.11 Memory management and leaks](#311-memory-management-and-leaks)
-   - [3.12 Header hygiene and include guards](#312-header-hygiene-and-include-guards)
-4. [Exercise-by-exercise requirements](#4-exercise-by-exercise-requirements)
-5. [Common pitfalls and peer-evaluation checklist](#5-common-pitfalls-and-peer-evaluation-checklist)
-6. [Glossary](#6-glossary)
+1. [Core concepts](#1-core-concepts)
+   - [1.1 Classes, const attributes and initializer lists](#11-classes-const-attributes-and-initializer-lists)
+   - [1.2 Orthodox Canonical Form](#12-orthodox-canonical-form)
+   - [1.3 Encapsulation and getters](#13-encapsulation-and-getters)
+   - [1.4 Exception handling](#14-exception-handling)
+   - [1.5 Custom exception classes](#15-custom-exception-classes)
+   - [1.6 Operator overloading and operator<<](#16-operator-overloading-and-operator)
+   - [1.7 Inheritance, virtual and abstract classes](#17-inheritance-virtual-and-abstract-classes)
+   - [1.8 The Template Method pattern](#18-the-template-method-pattern)
+   - [1.9 The Factory pattern and the Intern](#19-the-factory-pattern-and-the-intern)
+   - [1.10 Randomness in C++98](#110-randomness-in-c98)
+   - [1.11 Memory management and leaks](#111-memory-management-and-leaks)
+   - [1.12 Header hygiene and include guards](#112-header-hygiene-and-include-guards)
+2. [Exercise-by-exercise guide](#2-exercise-by-exercise-guide) — ex00, ex01, ex02, ex03 and a file map
+3. [Common pitfalls and peer-evaluation checklist](#3-common-pitfalls-and-peer-evaluation-checklist)
+4. [Glossary](#4-glossary)
 
 ---
 
-## 1. Overview and constraints
+## 1. Core concepts
 
-- Language: **C++** compiled with `-Wall -Wextra -Werror`.
-- Your code must still compile with **`-std=c++98`**.
-- The module is about **Object-Oriented Programming**, not C with classes.
-- Exception classes are the one documented exception to the usual design rules:
-  they do **not** have to follow the Orthodox Canonical Form. Every other class
-  must.
-
-Build example:
-
-```bash
-c++ -Wall -Wextra -Werror -std=c++98 main.cpp Bureaucrat.cpp Form.cpp -o program
-```
-
----
-
-## 2. General rules you must respect
-
-**Compiling**
-- `c++ -Wall -Wextra -Werror` and also compiles with `-std=c++98`.
-
-**Formatting / naming**
-- Directories: `ex00`, `ex01`, ... `exn`.
-- Class names in **UpperCamelCase**.
-- A class lives in files named after the class:
-  `ClassName.hpp` / `ClassName.h`, `ClassName.cpp`, (optionally `ClassName.tpp`).
-- Every output message ends with a newline and goes to standard output.
-- No Norminette in the C++ modules — but write clean, readable code your peers
-  can grade.
-
-**Allowed / forbidden**
-- You may use almost all of the standard library, and should prefer C++-ish
-  facilities over their C counterparts.
-- No external libraries. **C++11 and derived forms and Boost are forbidden.**
-- Forbidden functions: `*printf()`, `*alloc()`, `free()`. Using them = grade 0.
-- `using namespace <ns_name>` and `friend` are forbidden unless explicitly
-  stated = **-42**.
-- **STL is only allowed in Modules 08 and 09.** That means no containers
-  (`vector`, `list`, `map`, ...) and no algorithms (`<algorithm>`) here = **-42**.
-
-**Design requirements**
-- `new` means you must avoid **memory leaks**.
-- From Module 02 to Module 09 every class must be in **Orthodox Canonical Form**
-  except when explicitly stated otherwise.
-- A function implementation placed in a header file (except function templates)
-  = **0** for the exercise.
-- Each header must be usable **independently** and must include all its
-  dependencies; use **include guards** to prevent double inclusion = **0**
-  otherwise.
-
-**Makefile**: same rules as in C (see the Norm chapter about the Makefile).
-
----
-
-## 3. Core concepts
-
-### 3.1 Classes, const attributes and initializer lists
+### 1.1 Classes, const attributes and initializer lists
 
 A class groups data (attributes) and behaviour (member functions). Members can
 be `private`, `protected`, or `public`; by convention the data members are
@@ -133,7 +111,7 @@ Key facts to internalize:
 - A grade of **1 is the highest** and **150 is the lowest**. "Incrementing" a
   grade means making it *better*, so grade 3 increments to grade 2.
 
-### 3.2 Orthodox Canonical Form
+### 1.2 Orthodox Canonical Form
 
 Any class from Module 02 onward must define these four special members:
 
@@ -165,7 +143,7 @@ obvious.
   detail when you write `Bureaucrat` and `AForm`.
 - The subject explicitly exempts **exception classes** from OCF.
 
-### 3.3 Encapsulation and getters
+### 1.3 Encapsulation and getters
 
 Attributes are `private`; the outside world reads them through getters:
 
@@ -180,7 +158,7 @@ Rules of thumb:
 - `Form`'s attributes are `private`, and per ex02 they must **remain** in the
   base class even after it becomes abstract.
 
-### 3.4 Exception handling
+### 1.4 Exception handling
 
 Exceptions separate *error detection* from *error handling*.
 
@@ -218,7 +196,7 @@ catch (std::exception& e)
 }
 ```
 
-### 3.5 Custom exception classes
+### 1.5 Custom exception classes
 
 The module asks for exceptions named like `Bureaucrat::GradeTooHighException`
 and `Form::GradeTooLowException`. The natural way is to define them as **nested
@@ -256,7 +234,7 @@ Points:
   from member functions as `GradeTooHighException`.
 - Exception classes don't need OCF.
 
-### 3.6 Operator overloading and `operator<<`
+### 1.6 Operator overloading and `operator<<`
 
 Operators are functions with special names. The stream insertion operator is
 overloaded as a **free function** (a member `operator<<` would put the object on
@@ -276,7 +254,7 @@ std::ostream& operator<<(std::ostream& out, const Bureaucrat& b)
   `<name>, bureaucrat grade <grade>.`
 - `Form` must also overload `operator<<` to print all its information.
 
-### 3.7 Inheritance, virtual and abstract classes
+### 1.7 Inheritance, virtual and abstract classes
 
 Inheritance expresses an "is-a" relationship:
 
@@ -302,7 +280,7 @@ class ShrubberyCreationForm : public AForm { /* derived */ };
 - ex02 explicitly requires the base `Form` to be renamed `AForm` and be
   abstract, with its attributes still `private` and still owned by the base.
 
-### 3.8 The Template Method pattern
+### 1.8 The Template Method pattern
 
 For `execute()`, the subject says either you check requirements in every concrete
 class, or you check them once in the base and then call another function to do
@@ -335,7 +313,7 @@ The base class owns the *skeleton* (validate, then act); derived classes fill in
 only the varying step. This avoids duplicating validation in every concrete form
 and is a pattern worth naming in the evaluation.
 
-### 3.9 The Factory pattern and the Intern
+### 1.9 The Factory pattern and the Intern
 
 The intern has **no name, no grade, no unique characteristics** — it only has
 `makeForm(name, target)`, which returns a newly allocated `AForm*`:
@@ -394,7 +372,7 @@ Consequences:
   an "explicit error message", so printing and returning a null pointer is
   acceptable, but you must handle it in your tests.
 
-### 3.10 Randomness in C++98
+### 1.10 Randomness in C++98
 
 `RobotomyRequestForm` must succeed **50% of the time** and otherwise report
 failure. `<random>` is a C++11 header, so in C++98 use the C standard library
@@ -413,7 +391,7 @@ bool success = (std::rand() % 2 == 0);
 - The exact distribution doesn't need to be perfect for the module; it needs to
   be plausible and documented.
 
-### 3.11 Memory management and leaks
+### 1.11 Memory management and leaks
 
 - Every `new` needs a matching `delete`; every `new[]` a matching `delete[]`.
 - If a constructor throws after partially allocating, earlier allocations can
@@ -428,7 +406,7 @@ bool success = (std::rand() % 2 == 0);
 
 - The subject forbids `malloc`/`free` — use `new`/`delete`.
 
-### 3.12 Header hygiene and include guards
+### 1.12 Header hygiene and include guards
 
 - Each header must include everything it needs (e.g. `<string>`,
   `<iostream>`, `<exception>`) so it can be included on its own.
@@ -446,101 +424,432 @@ bool success = (std::rand() % 2 == 0);
 
 ---
 
-## 4. Exercise-by-exercise requirements
+## 2. Exercise-by-exercise guide
 
-### ex00 — Mommy, when I grow up, I want to be a bureaucrat!
+This section is both a requirements list and a **learning path**: for every
+exercise you get what to learn, the key idea, a minimal skeleton, the traps, and
+where each concept lives in this repository.
 
-- Directory: `ex00/`
-- Files: `Makefile`, `main.cpp`, `Bureaucrat.{h,hpp}`, `Bureaucrat.cpp`
-- Forbidden: none
+Build and run any of them with:
 
-Requirements:
-- `Bureaucrat` has a **constant name** and a grade in `[1, 150]`.
-- Instantiating with an invalid grade throws
-  `Bureaucrat::GradeTooHighException` or `Bureaucrat::GradeTooLowException`.
-- Getters: `getName()`, `getGrade()`.
-- Two member functions to increment/decrement the grade; out-of-range throws the
-  same exceptions as the constructor. Remember: grade 1 is highest — incrementing
-  grade 3 gives grade 2, and incrementing grade 1 throws `GradeTooHighException`.
-- Exceptions must be catchable with `try` / `catch (std::exception& e)`.
-- `operator<<` prints: `<name>, bureaucrat grade <grade>.`
-- Submit tests proving it works.
-
-### ex01 — Form up, maggots!
-
-- Directory: `ex01/`
-- Files: previous files + `Form.{h,hpp}`, `Form.cpp`
-- Forbidden: none
-
-Requirements:
-- `Form` has a **constant name**, a **bool** "is signed" (false at construction),
-  a **constant sign grade**, and a **constant execute grade**.
-- All attributes are `private`, not `protected`.
-- Form grades follow the same `[1,150]` rules and throw
-  `Form::GradeTooHighException` / `Form::GradeTooLowException`.
-- Getters for all attributes and an `operator<<` printing all form info.
-- `beSigned(Bureaucrat&)`: signs the form if the bureaucrat's grade is **>=**
-  the required sign grade (remember lower number = higher grade); otherwise
-  throws `Form::GradeTooLowException`.
-- `Bureaucrat::signForm(Form&)` calls `Form::beSigned()`; on success prints
-  `<bureaucrat> signed <form>`, otherwise
-  `<bureaucrat> couldn't sign <form> because <reason>.`
-- Submit tests.
-
-### ex02 — No, you need form 28B, not 28C...
-
-- Directory: `ex02/`
-- Files: `Makefile`, `main.cpp`, `Bureaucrat.*`, `AForm.*`,
-  `ShrubberyCreationForm.*`, `RobotomyRequestForm.*`, `PresidentialPardonForm.*`
-- Forbidden: none
-
-Requirements:
-- Base `Form` becomes an **abstract class** renamed `AForm`; attributes stay
-  `private` and in the base.
-- Concrete forms (each takes only a **target** constructor parameter):
-  - `ShrubberyCreationForm` — sign 145, exec 137. Writes ASCII trees to
-    `<target>_shrubbery` in the working directory.
-  - `RobotomyRequestForm` — sign 72, exec 45. Drilling noises, then reports
-    `<target> has been robotomized successfully` 50% of the time, else failure.
-  - `PresidentialPardonForm` — sign 25, exec 5. Reports `<target> has been
-    pardoned by Zaphod Beeblebrox`.
-- `execute(Bureaucrat const& executor) const` in the base form checks that the
-  form is signed and the executor's grade is high enough, then performs the
-  action. Throwing the appropriate exception otherwise.
-- Prefer doing the checks once in the base and delegating to a concrete action
-  (Template Method).
-- `Bureaucrat::executeForm(AForm const& form) const` attempts execution; on
-  success prints `<bureaucrat> executed <form>`, otherwise an explicit error.
-- Submit tests.
-
-### ex03 — At least this beats coffee-making
-
-- Directory: `ex03/`
-- Files: previous files + `Intern.{h,hpp}`, `Intern.cpp`
-- Forbidden: none
-
-Requirements:
-- `Intern` has no name/grade/characteristics.
-- `makeForm(name, target)` returns an `AForm*` for the matching form, target
-  initialized to the second argument.
-- Prints `Intern creates <form>`.
-- Unknown name: print an explicit error message.
-- **No excessive if/else-if/else chain** — use a table/factory design.
-- Example from the subject:
-
-  ```cpp
-  {
-      Intern   someRandomIntern;
-      AForm*   rrf;
-
-      rrf = someRandomIntern.makeForm("robotomy request", "Bender");
-  }
-  ```
-- Test everything, and don't leak the returned pointers.
+```bash
+cd exNN && make re && ./bureaucrat
+```
 
 ---
 
-## 5. Common pitfalls and peer-evaluation checklist
+### ex00 — Mommy, when I grow up, I want to be a bureaucrat!
+
+**Files:** `Makefile`, `main.cpp`, `Bureaucrat.hpp`, `Bureaucrat.cpp`
+
+**Requirements**
+- `Bureaucrat` has a **constant name** and a grade in `[1, 150]`.
+- An invalid grade in the constructor throws
+  `Bureaucrat::GradeTooHighException` or `Bureaucrat::GradeTooLowException`.
+- Getters: `getName()`, `getGrade()`.
+- Two functions to increment/decrement; out of range throws the same exceptions.
+  Grade 1 is the highest, so incrementing 2 gives 1, and incrementing 1 throws.
+- Exceptions catchable with `try` / `catch (std::exception& e)`.
+- `operator<<` prints `<name>, bureaucrat grade <grade>.`
+- Tests proving that all of it works.
+
+**What you must learn**
+1. **Const members need the initializer list.** `const std::string _name` cannot
+   be assigned in the constructor body, only initialized *before* it runs.
+2. **Initialization follows declaration order**, not the order you write in the
+   list. Reordering silently initializes with garbage values.
+3. **Throwing from a constructor.** If the body throws, the object is never
+   "born": already-initialized members are destroyed correctly, and the
+   `catch` block sees the exception as if the object never existed. This is why
+   checking the grade *after* the initializer list is safe.
+4. **Nested exception classes** are the idiomatic way to name them
+   `Bureaucrat::GradeTooHighException`: they are scoped to the enclosing class.
+5. **`operator<<` must be a free function.** As a member it would be
+   `bureaucrat << cout`, which is wrong.
+
+**Skeleton**
+
+```cpp
+class Bureaucrat {
+private:
+    const std::string _name;
+    int _grade;
+public:
+    Bureaucrat();
+    Bureaucrat(const std::string &name, int grade);
+    Bureaucrat(const Bureaucrat &other);
+    Bureaucrat &operator=(const Bureaucrat &other);
+    ~Bureaucrat();
+
+    const std::string &getName() const;
+    int getGrade() const;
+    void incrementGrade();
+    void decrementGrade();
+
+    class GradeTooHighException : public std::exception {
+    public:
+        virtual const char *what() const throw();
+    };
+    class GradeTooLowException : public std::exception {
+    public:
+        virtual const char *what() const throw();
+    };
+};
+
+std::ostream &operator<<(std::ostream &out, const Bureaucrat &b);
+```
+
+```cpp
+Bureaucrat::Bureaucrat(const std::string &name, int grade) : _name(name), _grade(grade) {
+    if (_grade < 1)
+        throw GradeTooHighException();
+    if (_grade > 150)
+        throw GradeTooLowException();
+}
+
+void Bureaucrat::incrementGrade() {
+    if (_grade == 1)
+        throw GradeTooHighException();
+    --_grade;               // 1 is the best grade, so incrementing DECREASES the number
+}
+
+void Bureaucrat::decrementGrade() {
+    if (_grade == 150)
+        throw GradeTooLowException();
+    ++_grade;
+}
+```
+
+**Traps**
+
+- **Grade direction.** Incrementing a grade makes it *better*, so the number
+  goes down. Getting this backwards is the single most common mistake.
+- **Bounds are inclusive.** 1 and 150 are valid; 0 and 151 throw.
+- **A `const` member breaks copy assignment.** You cannot do `_name = other._name`
+  in `operator=`. Two accepted answers:
+  1. Keep `_name` non-const and copy it (what this repo does) — simple, but the
+     subject says the name is *constant*.
+  2. Keep `_name` `const` and only copy `_grade` in `operator=` — stricter, the
+     name of the target object is then never changed by an assignment.
+
+  Choose one and be able to justify it at the defence.
+- **Self-assignment.** `a = a` must not destroy the object; guard with
+  `if (this != &other)`, or assign through a temporary.
+- **Throw inside a ternary.** This is legal:
+  ```cpp
+  _grade < 1 ? throw GradeTooHighException() : throw GradeTooLowException();
+  ```
+  Both branches are throw-expressions of type `void`, so the conditional has
+  type `void`. But this is **not** legal:
+  ```cpp
+  throw _grade < 1 ? GradeTooHighException() : GradeTooLowException();  // ERROR
+  ```
+  because two sibling exception types have no common type to convert to. When in
+  doubt, use two plain `if`s — clearer and impossible to get wrong.
+
+---
+
+### ex01 — Form up, maggots!
+
+**Files:** ex00 files + `Form.hpp`, `Form.cpp`
+
+**Requirements**
+- `Form`: **constant name**, `bool` "is signed" (`false` at construction),
+  **constant sign grade**, **constant execute grade** — all `private`, not
+  `protected`.
+- Form grades obey the same `[1, 150]` rules and throw
+  `Form::GradeTooHighException` / `Form::GradeTooLowException`.
+- Getters for everything + an `operator<<` printing all the form information.
+- `beSigned(const Bureaucrat&)`: signs if the bureaucrat's grade is **good
+  enough** (numeric value `<=` the sign grade), otherwise throws
+  `GradeTooLowException`.
+- `Bureaucrat::signForm(Form&)` calls `beSigned()` and prints
+  `<bureaucrat> signed <form>` on success, or
+  `<bureaucrat> couldn't sign <form> because <reason>` on failure.
+
+**What you must learn**
+1. **Composition of classes.** `Form` mentions `Bureaucrat` and vice versa —
+   the classic circular dependency. Break it with a **forward declaration**
+   (`class Bureaucrat;`) in the header and a normal `#include` in the `.cpp`.
+2. **Getters returning `const std::string&`** instead of a copy.
+3. **Deciding who reports the error.** `beSigned` *throws*; `signForm` *catches*
+   and turns the exception into a human-readable message. Never print an error
+   from deep inside the model and never `exit()`.
+4. **A `bool` member is not `const`** — it changes when the form is signed, so it
+   is the one attribute `operator=` can still copy.
+
+**Key comparison — the grade logic**
+
+```cpp
+// in Form::beSigned — a lower number means a better grade,
+// so the bureaucrat signs successfully when grade <= sign_grade
+void Form::beSigned(const Bureaucrat &b) {
+    if (b.getGrade() > _sign_grade)
+        throw GradeTooLowException();
+    _is_signed = true;
+}
+```
+
+```cpp
+// in Bureaucrat::signForm — exceptions become messages
+void Bureaucrat::signForm(Form &form) {
+    try {
+        form.beSigned(*this);
+        std::cout << _name << " signed " << form.getName() << std::endl;
+    } catch (std::exception &e) {
+        std::cout << _name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
+    }
+}
+```
+
+**Traps**
+
+- **`operator=` cannot touch `_name`, `_sign_grade`, `_execute_grade`** because
+  they are `const`. Only `_is_signed` is assignable. Same dilemma as ex00 — pick a
+  rule and apply it consistently.
+- **Reading a form before signing it**: `execute` does not exist yet in ex01;
+  signing only flips the flag.
+- **`form.getName()` vs `operator<<`** in the messages: `<form>` is conventionally
+  the form's *name*, not the whole printed object.
+
+---
+
+### ex02 — No, you need form 28B, not 28C...
+
+**Files:** `Makefile`, `main.cpp`, `Bureaucrat.*`, `AForm.*`,
+`ShrubberyCreationForm.*`, `RobotomyRequestForm.*`, `PresidentialPardonForm.*`
+
+**Requirements**
+- `Form` becomes the **abstract** class `AForm`; its attributes stay `private`
+  and stay in the base.
+- Concrete forms take **only a target**:
+  - `ShrubberyCreationForm` — sign 145, exec 137 → writes ASCII trees to
+    `<target>_shrubbery` in the working directory.
+  - `RobotomyRequestForm` — sign 72, exec 45 → drilling noises, then
+    `<target> has been robotomized successfully` 50% of the time, else a failure
+    message.
+  - `PresidentialPardonForm` — sign 25, exec 5 →
+    `<target> has been pardoned by Zaphod Beeblebrox`.
+- `execute(const Bureaucrat&) const` validates (signed? grade high enough?) and
+  then performs the action.
+- `Bureaucrat::executeForm(const AForm&) const` attempts execution and prints
+  `<bureaucrat> executed <form>`, or an explicit error.
+
+**What you must learn**
+1. **Abstract classes and pure virtual functions.**
+   `virtual void executeAction() const = 0;` makes `AForm` impossible to
+   instantiate, but you can still hold `AForm *` / `AForm &` pointing at derived
+   objects. This is the core of runtime polymorphism.
+2. **Virtual destructor.** If anything ever `delete`s through an `AForm*`, the
+   base destructor must be `virtual`, otherwise the derived destructor is
+   skipped. Declare `virtual ~AForm();`.
+3. **The Template Method pattern.** The base owns the *skeleton* (validate, then
+   act); the derived class fills in only the varying step:
+
+   ```cpp
+   // AForm.hpp
+   protected:
+       virtual void executeAction() const = 0;
+
+   // AForm.cpp
+   void AForm::execute(const Bureaucrat &executor) const {
+       if (!_is_signed)
+           throw NotSignedException();
+       if (executor.getGrade() > _execute_grade)
+           throw GradeTooLowException();
+       executeAction();       // <- the polymorphic hook
+   }
+   ```
+
+   Writing the same two `if`s inside three different classes is the "ugly" option
+   the subject warns about.
+4. **A third exception: `NotSignedException`.** "Not signed" and "grade too low"
+   are genuinely different errors.
+5. **Each derived class stores its own `_target`**, but all *form* attributes
+   (name, signed flag, grades) stay in the base and stay `private`.
+6. **File output** (`<fstream>`) and **randomness in C++98** (`<cstdlib>`).
+
+**Derived-class skeleton** (the shape repeats three times)
+
+```cpp
+class ShrubberyCreationForm : public AForm {
+private:
+    const std::string _target;
+public:
+    ShrubberyCreationForm();
+    ShrubberyCreationForm(const std::string &target);
+    ShrubberyCreationForm(const ShrubberyCreationForm &other);
+    ShrubberyCreationForm &operator=(const ShrubberyCreationForm &other);
+    ~ShrubberyCreationForm();
+protected:
+    virtual void executeAction() const;
+};
+```
+
+```cpp
+ShrubberyCreationForm::ShrubberyCreationForm(const std::string &target)
+    : AForm("shrubbery creation", 145, 137), _target(target) {}
+
+ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &other)
+    : AForm(other), _target(other._target) {}
+
+ShrubberyCreationForm &ShrubberyCreationForm::operator=(const ShrubberyCreationForm &other) {
+    if (this != &other)
+        AForm::operator=(other);   // the base copies what it can
+    return (*this);
+}
+```
+
+```cpp
+void ShrubberyCreationForm::executeAction() const {
+    std::ofstream file((_target + "_shrubbery").c_str());   // C++98: c_str()
+    if (!file.is_open())
+        throw std::ios_base::failure("could not open the output file");
+    file << "   *\n  ***\n *****\n*******\n   |\n   |\n";
+}
+```
+
+```cpp
+void RobotomyRequestForm::executeAction() const {
+    std::cout << "* BZZZZZ... drilling noises *" << std::endl;
+    if (std::rand() % 2 == 0)                                   // ~50%
+        std::cout << _target << " has been robotomized successfully" << std::endl;
+    else
+        std::cout << _target << " robotomization failed" << std::endl;
+}
+```
+
+**Traps**
+
+- **`std::ofstream` takes a C string in C++98**: `(_target + "_shrubbery").c_str()`.
+- **Seed the RNG once, in `main`**, never inside `executeAction`, or every call
+  repeats the same sequence:
+  ```cpp
+  std::srand(std::time(NULL));   // <cstdlib> + <ctime>
+  ```
+  `<random>` does not exist in C++98.
+- **The copy constructor must forward to `AForm(other)`.** Forgetting it silently
+  default-constructs the base and the form loses its name and grades.
+- **Pure virtual ≠ no body.** `AForm::execute` is *not* pure virtual; only
+  `executeAction` is. `execute` must be a normal (const) member.
+- **`AForm` still needs the OCF** even though it is abstract: a protected or
+  public default constructor, copy constructor, `operator=`, and a `virtual`
+  destructor. You just cannot instantiate it directly.
+- **`getTarget()` is not required by the subject** — the target can stay private
+  and only be used inside `executeAction`.
+
+---
+
+### ex03 — At least this beats coffee-making
+
+**Files:** ex02 files + `Intern.hpp`, `Intern.cpp`
+
+**Requirements**
+- `Intern` has **no name, no grade, no characteristics** — only `makeForm`.
+- `makeForm(name, target)` returns a **newly allocated** `AForm *` whose target is
+  the second argument.
+- Prints `Intern creates <form>`.
+- Unknown name → print an explicit error message.
+- **No long `if / else if / else` chain** — use a table / factory design.
+- The caller owns the returned pointer and must `delete` it.
+
+**What you must learn**
+1. **Function pointers** as a way to store "how to build this object" in data.
+2. **The Factory pattern**: a table mapping a string to a creation function,
+   instead of branching on the string three times.
+3. **Ownership and `delete`.** Returning a raw pointer moves the responsibility
+   to the caller. This is where ex03 leaks are born.
+
+**Skeleton**
+
+```cpp
+class Intern {
+public:
+    Intern();
+    Intern(const Intern &other);
+    Intern &operator=(const Intern &other);
+    ~Intern();
+
+    AForm *makeForm(const std::string &name, const std::string &target) const;
+};
+```
+
+```cpp
+static AForm *makeShrubbery(const std::string &target) { return (new ShrubberyCreationForm(target)); }
+static AForm *makeRobotomy(const std::string &target)  { return (new RobotomyRequestForm(target)); }
+static AForm *makePardon(const std::string &target)    { return (new PresidentialPardonForm(target)); }
+
+typedef AForm *(*t_make)(const std::string &);
+
+struct FormEntry {
+    const char *name;
+    t_make make;
+};
+
+static const FormEntry g_forms[] = {
+    { "shrubbery creation",   makeShrubbery },
+    { "robotomy request",     makeRobotomy },
+    { "presidential pardon",  makePardon }
+};
+
+AForm *Intern::makeForm(const std::string &name, const std::string &target) const {
+    for (int i = 0; i < 3; ++i) {
+        if (name == g_forms[i].name) {
+            std::cout << "Intern creates " << name << std::endl;
+            return (g_forms[i].make(target));
+        }
+    }
+    std::cout << "Intern cannot create " << name << ": unknown form name" << std::endl;
+    return (NULL);
+}
+```
+
+**Traps**
+
+- **Do not leak.** Every pointer returned by `makeForm` needs a `delete`:
+  ```cpp
+  AForm *f = intern.makeForm("robotomy request", "Bender");
+  if (f) {
+      boss.signForm(*f);
+      boss.executeForm(*f);
+      delete f;
+  }
+  ```
+  `delete` through an `AForm *` is only safe because `~AForm` is `virtual`
+  (ex02's lesson, reused here).
+- **`Intern` is still a class, so it needs the OCF** — but all four members are
+  trivial. Omit the parameter names in the definitions
+  (`Intern::Intern(const Intern &) {}`) to avoid `-Wunused-parameter`.
+- **Unused-parameter / unused-variable warnings are errors** with `-Werror`.
+- **Seeding for `RobotomyRequestForm`** still happens in `main`, not here.
+- **A `nullptr` in C++98 does not exist** — use `NULL` or `0`.
+
+---
+
+### What this repository implements
+
+| Exercise | Files | Highlights |
+| --- | --- | --- |
+| ex00 | `Bureaucrat.{hpp,cpp}`, `main.cpp` | OCF, const name, nested exceptions, `operator<<` |
+| ex01 | + `Form.{hpp,cpp}` | forward declaration, `beSigned` / `signForm`, third exception set |
+| ex02 | + `AForm.{hpp,cpp}`, `ShrubberyCreationForm.*`, `RobotomyRequestForm.*`, `PresidentialPardonForm.*` | abstract base, virtual destructor, Template Method, `executeForm` |
+| ex03 | + `Intern.{hpp,cpp}` | factory table with function pointers, ownership / `delete` |
+
+All four compile with:
+
+```bash
+c++ -Wall -Wextra -Werror -std=c++98 *.cpp -o program
+```
+
+and were verified clean under AddressSanitizer + UndefinedBehaviorSanitizer:
+
+```bash
+c++ -Wall -Wextra -Werror -std=c++98 -fsanitize=address,undefined *.cpp -o /tmp/asan_check && /tmp/asan_check
+```
+
+---
+
+## 3. Common pitfalls and peer-evaluation checklist
 
 Grade logic (the #1 source of bugs):
 - [ ] Grade 1 is the **highest**; incrementing improves (decreases) the number.
@@ -579,7 +888,7 @@ Memory:
 
 ---
 
-## 6. Glossary
+## 4. Glossary
 
 | Term | Meaning |
 | --- | --- |
@@ -607,7 +916,7 @@ Memory:
 
 1. Read the concept sections in order — each one builds on the last.
 2. Implement `ex00` before reading `ex01` requirements in detail, and so on.
-3. Re-read your code against the [peer-evaluation checklist](#5-common-pitfalls-and-peer-evaluation-checklist)
+3. Re-read your code against the [peer-evaluation checklist](#3-common-pitfalls-and-peer-evaluation-checklist)
    before defending the module.
 4. When stuck, reason first, then discuss with a peer — the subject explicitly
    values the learning journey over the answer.
