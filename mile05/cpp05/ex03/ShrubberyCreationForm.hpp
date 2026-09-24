@@ -16,6 +16,6 @@ public:
 
 protected:
 	virtual void executeAction() const;
-};
+};~
 
 #endif
